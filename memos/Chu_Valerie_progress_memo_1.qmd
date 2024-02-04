@@ -1,0 +1,113 @@
+---
+title: "Progress Memo 1"
+subtitle: |
+  | Final Project 
+  | Data Science 2 with R (STAT 301-2)
+author: "Valerie Chu"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  echo: false
+  warning: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+---
+
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+[https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git](https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git)
+
+:::
+
+
+```{r}
+# load packages
+library(tidyverse)
+library(tidymodels)
+library(here)
+
+# handle common conflicts
+tidymodels_prefer()
+
+```
+
+
+```{r}
+avocado <- read_csv(here("data/avocado.csv")) |> 
+  janitor::clean_names()
+
+```
+
+## Why this data
+
+In California where I'm from, avocados are a big thing. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados.
+
+## Data source
+
+This dataset contains historical data on avocado prices and sales volume in multiple US markets.
+
+This is the link to the Avocado Prices dataset on Kaggle:
+**[https://www.kaggle.com/datasets/neuromusic/avocado-prices](https://www.kaggle.com/datasets/neuromusic/avocado-prices)**
+
+I found this dataset on Kaggle. Justin Kiggins, the owner of the dataset, writes that this data was downloaded from the Hass Avocado Board website in May of 2018 & compiled into a single CSV.
+
+There are 18,249 observations in this dataset and 14 variables. 
+
+These variables include `average_price`, `total_volume`, and more that I think could be super interesting to analyze and use as predictors of the prices avocados will sell at or places where avocados will be cheaper at. 
+
+These are the definitions for some of the variables: 
+
+- `date` - The date of the observation
+
+- `average_price` - the average price of a single avocado
+
+- `type` - conventional or organic
+
+- `year` - the year
+
+- `region` - the city or region of the observation
+
+- `total_volume` - Total number of avocados sold
+
+- `x4046` - Total number of avocados with PLU 4046 sold
+
+- `x4225` - Total number of avocados with PLU 4225 sold
+
+- `x4770` - Total number of avocados with PLU 4770 sold
+
+
+## Data quality & complexity check
+
+As mentioned above, there are 18,249 observations and 14 variables. 
+
+There is 1 date-time object. There are 10 numerical variables. There are two categorical variables. 
+
+The dataset is complex. 
+
+Our check for missingness reveals that there is none in this dataset. 
+
+```{r}
+naniar::gg_miss_var(avocado)
+
+```
+
+
+## Potential data issues
+
+I don't anticipate any potential data issues. There are no missing observations. The dataset is well-documented and well-sourced. It's also very interesting. 
+
+
+## Misc
+
+The avocado dataset is clean, organized, and has lots of data. 
+
+I'm super excited to start working with it! 
