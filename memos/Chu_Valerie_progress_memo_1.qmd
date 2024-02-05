@@ -12,7 +12,6 @@ format:
     embed-resources: true
     
 execute:
-  echo: false
   warning: false
 
 from: markdown+emoji 
@@ -30,6 +29,8 @@ citation-location: margin
 
 
 ```{r}
+#| echo: false
+
 # load packages
 library(tidyverse)
 library(tidymodels)
@@ -40,7 +41,7 @@ tidymodels_prefer()
 
 ```
 
-
+Read in the avocado dataset:
 ```{r}
 avocado <- read_csv(here("data/avocado.csv")) |> 
   janitor::clean_names()
@@ -49,7 +50,7 @@ avocado <- read_csv(here("data/avocado.csv")) |>
 
 ## Why this data
 
-In California where I'm from, avocados are a big thing. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados.
+I'm Californian, and avocados are a big thing. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados...
 
 ## Data source
 
@@ -89,16 +90,59 @@ These are the definitions for some of the variables:
 
 As mentioned above, there are 18,249 observations and 14 variables. 
 
-There is 1 date-time object. There are 10 numerical variables. There are two categorical variables. 
+There is 1 date-time object. There are 10 numerical variables. There are 2 categorical variables. There is 1 id column (`x1`).
 
 The dataset is complex. 
 
 Our check for missingness reveals that there is none in this dataset. 
 
 ```{r}
+#| echo: false
+
 naniar::gg_miss_var(avocado)
 
 ```
+
+A skim of this dataset also confirms this. 
+```{r}
+#| echo: false
+
+skimr::skim(avocado)
+
+```
+
+## Prediction Problem
+
+I want to predict `average_price` using the other variables. The predictor variables I definitely want to use are `type`, `year`, and `total_volume.` I might also consider using `x4046`, `x4225`, and `x4770`, which describe the different types of avocados, as classified by the Hass Avocado Board. 
+
+This is a regression problem. It would be useful to predict `average_price` so that I can determine the combination of variables that contribute to the lowest average price of an avocado. In other words, I would like to eventually move to a city with the cheapest avocados. 
+
+Let's explore the variable `average_price`. 
+
+```{r}
+#| echo: false
+
+avocado |> 
+  ggplot(aes(x = average_price)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = seq(0, 4, 0.5)) +
+  theme_minimal()
+
+```
+
+The median `average_price` of an avocado in this dataset is $1.37. The IQR is about $0.56. This boxplot is slightly right skewed, but not to the extreme that it would warrant any logarithmic transformations. There are several outliers for `average_price`, with these outliers spanning the $2.50 to $3.25 per avocado range. The cheapest average price of an avocado is $0.44. The most expensive average price of an avocado is $3.25.
+
+```{r}
+#| echo: false
+
+avocado |> 
+  select(average_price) |> 
+  summary(mean = mean(average_price, na.rm = TRUE),
+          median = median(average_price, na.rm = TRUE)) |> 
+  knitr::kable()
+
+```
+
 
 
 ## Potential data issues
@@ -110,4 +154,6 @@ I don't anticipate any potential data issues. There are no missing observations.
 
 The avocado dataset is clean, organized, and has lots of data. 
 
-I'm super excited to start working with it! 
+My timeline is to get my models fitted by next week, and to keep up with the progress memos and final project milestones as they come. 
+
+I'm super excited to start working with this avocado dataset! 
