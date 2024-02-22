@@ -1,0 +1,93 @@
+---
+title: "Progress Memo 2"
+subtitle: |
+  | Final Project 
+  | Data Science 2 with R (STAT 301-2)
+author: "Valerie Chu"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  warning: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+---
+
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+[https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git](https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git)
+
+:::
+
+
+```{r}
+#| echo: false
+
+# load packages
+library(tidyverse)
+library(tidymodels)
+library(here)
+
+# handle common conflicts
+tidymodels_prefer()
+
+```
+
+Read in the avocado dataset:
+```{r}
+avocado <- read_csv(here("data/avocado.csv")) |> 
+  janitor::clean_names()
+
+```
+
+## An Quick Overview
+
+I'm Californian, and avocados are a big thing. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados...
+
+This dataset contains historical data on avocado prices and sales volume in multiple US markets.
+
+This is the link to the Avocado Prices dataset on Kaggle:
+**[https://www.kaggle.com/datasets/neuromusic/avocado-prices](https://www.kaggle.com/datasets/neuromusic/avocado-prices)**
+
+This data was downloaded from the Hass Avocado Board website in May of 2018 & compiled into a single CSV. There are 18,249 observations in this dataset and 14 variables. There is 1 date-time object, 10 numerical variables, 2 categorical variables and 1 id column. There is no missingness in this dataset. 
+
+I want to predict the prices avocados will sell at or places where avocados will be cheaper at (ie `average_price`). 
+
+::: {.callout-tip icon="false"}
+## Assessment Metric
+
+The assessment metric is the RMSE, RSQ, and MAE produced by a kitchen sink ordinary linear regression model. 
+
+:::
+
+These are the definitions for some of the variables: 
+
+- `date` - The date of the observation
+
+- `average_price` - the average price of a single avocado
+
+- `type` - conventional or organic
+
+- `year` - the year
+
+- `region` - the city or region of the observation
+
+- `total_volume` - Total number of avocados sold
+
+- `x4046` - Total number of avocados with PLU 4046 sold
+
+- `x4225` - Total number of avocados with PLU 4225 sold
+
+- `x4770` - Total number of avocados with PLU 4770 sold
+
+
+
+## 

@@ -1,5 +1,5 @@
 # Valerie Chu's STAT 301-2 Final Project 
-# Initial data checks
+# Initial Setup
 
 # load packages
 library(tidyverse)
@@ -14,23 +14,23 @@ tidymodels_prefer()
 avocado <- read_csv(here("data/avocado.csv")) |> 
   janitor::clean_names()
 
+# split the data
+# set seed for random split
+set.seed(301)
+avocado_split <- avocado |> 
+  initial_split(prop = 0.70, strata = average_price)
+avocado_train <- training(avocado_split)
+avocado_test <- testing(avocado_split)
 
-# Checking Data Complexity
-naniar::gg_miss_var(avocado)
 
-skimr::skim(avocado)
+# fold the data
+avocado_folds <- vfold_cv(avocado_train, v = 10, repeats = 5,
+                           strata = average_price)
 
 
-# Exploring `average_price`
-avocado |> 
-  ggplot(aes(x = average_price)) +
-  geom_boxplot() +
-  scale_x_continuous(breaks = seq(0, 4, 0.5)) +
-  theme_minimal()
+# save to results
+save(avocado_split, avocado_test, avocado_train, file = "results/avocado_split.rda")
+save(avocado_folds, file = "results/avocado_folds.rda")
 
-avocado |> 
-  select(average_price) |> 
-  summary(mean = mean(average_price, na.rm = TRUE),
-          median = median(average_price, na.rm = TRUE)) |> 
-  knitr::kable()
+
 
