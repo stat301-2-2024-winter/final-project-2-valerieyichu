@@ -1,5 +1,5 @@
 # Valerie Chu's STAT 301-2 Final Project 
-# Define and fit parametric models
+# Define and fit tree models
 
 # load packages ----
 library(tidyverse)
@@ -12,6 +12,7 @@ tidymodels_prefer()
 ## Recipes ----
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_recipe_param.rda"))
+load(here("results/avocado_recipe_tree.rda"))
 
 library(doMC)
 registerDoMC(cores = parallel::detectCores(logical = TRUE))
@@ -56,4 +57,16 @@ tuned_rf <- tune_grid(rf_wflow,
 # write out results (fitted/trained workflows) ----
 save(tuned_rf, file = here("results/tuned_rf.rda"))
 
+# autoplot
+autoplot(tuned_rf, metric = "rmse") +
+  labs(title = "Random Forest")
+
+
+tuned_rf |> select_best(metric = "rmse")
+
+tbl_rf <- tuned_rf |> 
+  show_best("rmse") |> 
+  slice_min(mean) |> 
+  select(mean, n, std_err) |> 
+  mutate(model = "Random Forest")
 

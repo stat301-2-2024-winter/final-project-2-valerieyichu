@@ -28,7 +28,8 @@ tidymodels_prefer()
 load(here("results/avocado_split.rda"))
 
 # load pre-processing/feature engineering/recipe
-load(here("results/avocado_recipes.rda"))
+load(here("results/avocado_recipe_param.rda"))
+load(here("results/avocado_recipe_tree.rda"))
 
 set.seed(301)
 # model specifications ----
