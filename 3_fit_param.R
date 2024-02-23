@@ -11,6 +11,7 @@ tidymodels_prefer()
 
 ## Recipes ----
 load(here("results/avocado_split.rda"))
+load(here("results/avocado_folds.rda"))
 load(here("results/avocado_recipe_param.rda"))
 
 library(doMC)

@@ -25,7 +25,7 @@ prep(avocado_recipe_param) |>
 save(avocado_recipe_param, file = "results/avocado_recipe_param.rda")
 
 
-# Tree-Based Recipe
+# Kitchen Sink Tree-Based Recipe
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_folds.rda"))
 
