@@ -16,6 +16,13 @@ tidymodels_prefer()
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_recipe_param.rda"))
 load(here("results/avocado_recipe_tree.rda"))
+load(here("results/fit_lm.rda"))
+load(here("results/fit_lasso.rda"))
+load(here("results/fit_ridge.rda"))
+load(here("results/tuned_bt.rda"))
+load(here("results/tuned_knn.rda"))
+load(here("results/tuned_rf.rda"))
+
 
 library(doMC)
 registerDoMC(cores = parallel::detectCores(logical = TRUE))
@@ -23,7 +30,7 @@ registerDoMC(cores = parallel::detectCores(logical = TRUE))
 # handle common conflicts
 tidymodels_prefer()
 
-# Find our best model
+# More complicated table; display RMSE, RSQ
 lm_results <- collect_metrics(fit_lm) |> 
   mutate(model = "lm")
 
@@ -33,15 +40,47 @@ lasso_results <- collect_metrics(fit_lasso) |>
 ridge_results <- collect_metrics(fit_ridge) |> 
   mutate(model = "ridge")
 
-rf_results <- collect_metrics(fit_rf) |> 
+rf_results <- collect_metrics(tuned_rf) |> 
   mutate(model = "rf")
 
-lm_results |> 
+bt_results <- collect_metrics(tuned_bt) |> 
+  mutate(model = "bt")
+
+knn_results <- collect_metrics(tuned_knn) |> 
+  mutate(model = "knn") |> 
+  knitr::kable()
+
+simple_tbl_result <- lm_results |> 
   bind_rows(lasso_results) |> 
   bind_rows(ridge_results) |> 
   bind_rows(rf_results) |> 
+  bind_rows(bt_results) |> 
+  bind_rows(knn_results) |> 
   select(-.config, -.estimator) |> 
   knitr::kable()
 
+save(simple_tbl_result, file = "results/simple_tbl_result.rda")
 
+
+## Simpler table; display only RMSE
+model_results <- as_workflow_set(
+  bt = tuned_bt,
+  rf = tuned_rf,
+  knn = tuned_knn, 
+  lm = fit_lm, 
+  ridge = fit_ridge, 
+  lasso = fit_lasso
+)
+
+tbl_result <- model_results |> 
+  collect_metrics() |> 
+  filter(.metric == "rmse") |> 
+  slice_min(mean, by = wflow_id) |> 
+  arrange(mean) |> 
+  select(`Model Type` = wflow_id,
+         `RMSE` = mean, 
+         `Std Error` = std_err, 
+         `Num Computations` = n) 
+
+save(tbl_result, file = "results/tbl_result.rda")
 
