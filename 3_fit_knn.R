@@ -33,7 +33,7 @@ knn_spec <- nearest_neighbor(mode = "regression",
 # define workflows ----
 knn_workflow <- workflow() |> 
   add_model(knn_spec) |> 
-  add_recipe(avocado_recipe)
+  add_recipe(avocado_recipe_tree)
 
 # hyperparameter tuning values ----
 knn_params <- extract_parameter_set_dials(knn_spec)
