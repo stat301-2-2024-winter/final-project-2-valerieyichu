@@ -64,7 +64,7 @@ I want to predict the prices avocados will sell at or places where avocados will
 ::: {.callout-tip icon="false"}
 ## Assessment Metric
 
-The assessment metric is the RMSE, RSQ, and MAE produced by a kitchen sink ordinary linear regression model. 
+The assessment metric is the RMSE. 
 
 :::
 
@@ -90,4 +90,16 @@ These are the definitions for some of the variables:
 
 
 
-## 
+## Table
+
+
+```{r}
+load(here("results/tbl_result.rda"))
+tbl_result
+
+```
+
+The best model is the random forest model because it has the lowest RMSE. 
+
+
+

@@ -16,7 +16,7 @@ load(here("results/avocado_split.rda"))
 # Recipe for ordinary linear regression, lasso, ridge
 avocado_recipe_param <- recipe(average_price ~ ., data = avocado_train) |> 
   step_rm(x1, date, type, year, region) |> 
-  step_zv(all_predictors()) |> 
+  step_nzv(all_predictors()) |> 
   step_normalize(all_predictors())
 
 prep(avocado_recipe_param) |> 

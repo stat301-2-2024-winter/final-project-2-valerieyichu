@@ -16,6 +16,7 @@ tidymodels_prefer()
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_recipe_param.rda"))
 load(here("results/avocado_recipe_tree.rda"))
+load(here("results/fit_null.rda"))
 load(here("results/fit_lm.rda"))
 load(here("results/fit_lasso.rda"))
 load(here("results/fit_ridge.rda"))
@@ -31,6 +32,13 @@ registerDoMC(cores = parallel::detectCores(logical = TRUE))
 tidymodels_prefer()
 
 # More complicated table; display RMSE, RSQ
+fit_null |> collect_metrics(metric = "rmse")
+null_results <- collect_metrics(fit_null) |> 
+  mutate(model = "null")
+
+lm_results <- collect_metrics(fit_lm) |> 
+  mutate(model = "lm")
+
 lm_results <- collect_metrics(fit_lm) |> 
   mutate(model = "lm")
 
@@ -47,10 +55,10 @@ bt_results <- collect_metrics(tuned_bt) |>
   mutate(model = "bt")
 
 knn_results <- collect_metrics(tuned_knn) |> 
-  mutate(model = "knn") |> 
-  knitr::kable()
+  mutate(model = "knn") 
 
-simple_tbl_result <- lm_results |> 
+simple_tbl_result <- null_results |> 
+  bind_rows(lm_results) |> 
   bind_rows(lasso_results) |> 
   bind_rows(ridge_results) |> 
   bind_rows(rf_results) |> 
@@ -64,14 +72,16 @@ save(simple_tbl_result, file = "results/simple_tbl_result.rda")
 
 ## Simpler table; display only RMSE
 model_results <- as_workflow_set(
+  null = fit_null,
+  lm = fit_lm, 
+  lasso = fit_lasso,
+  ridge = fit_ridge, 
   bt = tuned_bt,
   rf = tuned_rf,
-  knn = tuned_knn, 
-  lm = fit_lm, 
-  ridge = fit_ridge, 
-  lasso = fit_lasso
+  knn = tuned_knn
 )
 
+# show the minimums of the rmse
 tbl_result <- model_results |> 
   collect_metrics() |> 
   filter(.metric == "rmse") |> 
