@@ -41,8 +41,9 @@ tidymodels_prefer()
 
 ```
 
-Read in the avocado dataset:
-```{r}
+
+```{r, echo = FALSE}
+# Read in the avocado dataset
 avocado <- read_csv(here("data/avocado.csv")) |> 
   janitor::clean_names()
 
@@ -59,14 +60,7 @@ This is the link to the Avocado Prices dataset on Kaggle:
 
 This data was downloaded from the Hass Avocado Board website in May of 2018 & compiled into a single CSV. There are 18,249 observations in this dataset and 14 variables. There is 1 date-time object, 10 numerical variables, 2 categorical variables and 1 id column. There is no missingness in this dataset. 
 
-I want to predict the prices avocados will sell at or places where avocados will be cheaper at (ie `average_price`). 
-
-::: {.callout-tip icon="false"}
-## Assessment Metric
-
-The assessment metric is the RMSE. 
-
-:::
+**I want to predict the prices avocados will sell at (ie `average_price`).** So this is a **regression problem**. 
 
 These are the definitions for some of the variables: 
 
@@ -92,14 +86,33 @@ These are the definitions for some of the variables:
 
 ## Table
 
+::: {.callout-tip icon="false"}
+## Assessment Metric
 
-```{r}
+The assessment metric is the RMSE. 
+
+:::
+
+The table of RMSEs and standard errors created below was made using kitchen recipes. 
+
+The baseline is the null model. 
+
+```{r, echo = FALSE}
 load(here("results/tbl_result.rda"))
-tbl_result
+tbl_result |> 
+  knitr::kable()
 
 ```
 
 The best model is the random forest model because it has the lowest RMSE. 
+
+## EDA
+
+
+## How it's going
+
+I've split and folded the data; created a kitchen sink recipe; and fitted null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest models. 
+
 
 
 
