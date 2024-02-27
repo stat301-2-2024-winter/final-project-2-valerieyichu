@@ -3041,13 +3041,16 @@ vertical-align: -.125em;
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#an-quick-overview" id="toc-an-quick-overview" class="nav-link active" data-scroll-target="#an-quick-overview">An Quick Overview</a></li>
-  <li><a href="#table" id="toc-table" class="nav-link" data-scroll-target="#table">Table</a></li>
+  <li><a href="#a-quick-overview" id="toc-a-quick-overview" class="nav-link active" data-scroll-target="#a-quick-overview">A Quick Overview</a></li>
+  <li><a href="#the-assessment-metric" id="toc-the-assessment-metric" class="nav-link" data-scroll-target="#the-assessment-metric">The Assessment Metric</a></li>
+  <li><a href="#my-analysis-plan" id="toc-my-analysis-plan" class="nav-link" data-scroll-target="#my-analysis-plan">My Analysis Plan</a></li>
+  <li><a href="#a-table" id="toc-a-table" class="nav-link" data-scroll-target="#a-table">A Table</a></li>
   <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
+  <li><a href="#how-its-going" id="toc-how-its-going" class="nav-link" data-scroll-target="#how-its-going">How it’s going</a></li>
   </ul>
 </nav>
 </div>
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
@@ -3095,13 +3098,13 @@ Github Repo Link
 <p><a href="https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git">https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git</a></p>
 </div>
 </div>
-<section id="an-quick-overview" class="level2">
-<h2 class="anchored" data-anchor-id="an-quick-overview">An Quick Overview</h2>
+<section id="a-quick-overview" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="a-quick-overview">A Quick Overview</h2>
 <p>I’m Californian, and avocados are a big thing. There’s avocado toast, avocado spread, avocado in salad, and much more. That’s why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados…</p>
 <p>This dataset contains historical data on avocado prices and sales volume in multiple US markets.</p>
-<p>This is the link to the Avocado Prices dataset on Kaggle: <strong><a href="https://www.kaggle.com/datasets/neuromusic/avocado-prices">https://www.kaggle.com/datasets/neuromusic/avocado-prices</a></strong></p>
-<p>This data was downloaded from the Hass Avocado Board website in May of 2018 &amp; compiled into a single CSV. There are 18,249 observations in this dataset and 14 variables. There is 1 date-time object, 10 numerical variables, 2 categorical variables and 1 id column. There is no missingness in this dataset.</p>
-<p><strong>I want to predict the prices avocados will sell at (ie <code>average_price</code>).</strong> So this is a <strong>regression problem</strong>.</p>
+<p>This is the link to the Avocado Prices dataset on Kaggle: <strong><a href="https://www.kaggle.com/datasets/neuromusic/avocado-prices">https://www.kaggle.com/datasets/neuromusic/avocado-prices</a></strong> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
+<div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Kiggins, Justin. “Avocado Prices.” Kaggle, 2018, https://www.kaggle.com/datasets/neuromusic/avocado-prices.</p></li><li id="fn2"><p><sup>2</sup> Hass Avocado Board, https://hassavocadoboard.com/</p></li></div><p>This data was downloaded from the Hass Avocado Board website <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> in May of 2018 and compiled into a single CSV. There are 18,249 observations in this dataset and 14 variables. There is 1 date-time object, 10 numerical variables, 2 categorical variables and 1 id column. There is no missingness in this dataset.</p>
+<p><strong>I want to predict the prices avocados will sell at (ie. <code>average_price</code>).</strong> So this is a <strong>regression problem</strong>.</p>
 <p>These are the definitions for some of the variables:</p>
 <ul>
 <li><p><code>date</code> - The date of the observation</p></li>
@@ -3115,23 +3118,21 @@ Github Repo Link
 <li><p><code>x4770</code> - Total number of avocados with PLU 4770 sold</p></li>
 </ul>
 </section>
-<section id="table" class="level2">
-<h2 class="anchored" data-anchor-id="table">Table</h2>
-<div class="callout callout-style-default callout-tip no-icon callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon no-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Assessment Metric
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The assessment metric is the RMSE.</p>
-</div>
-</div>
-<p>The table of RMSEs and standard errors created below was made using kitchen recipes.</p>
-<p>The baseline is the null model.</p>
+<section id="the-assessment-metric" class="level2">
+<h2 class="anchored" data-anchor-id="the-assessment-metric">The Assessment Metric</h2>
+<p><strong>The assessment metric is the RMSE.</strong></p>
+</section>
+<section id="my-analysis-plan" class="level2">
+<h2 class="anchored" data-anchor-id="my-analysis-plan">My Analysis Plan</h2>
+<p>I split the data using a 70-30 split, which results in 12,772 observations in the training dataset and 5,477 observations in the testing dataset.</p>
+<p>I also v-fold cross-validation to resample my training data. I used 10 folds and 5 repeats.</p>
+<p>I used these models: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest.</p>
+<p>I will be using a kitchen sink recipe and a recipe with interactions, the latter of which I will create.</p>
+</section>
+<section id="a-table" class="level2">
+<h2 class="anchored" data-anchor-id="a-table">A Table</h2>
+<p>The table of RMSEs and standard errors created below was made using kitchen recipes. It displays the RMSE and standard error for the model with the lowest RMSE for each model type.</p>
+<p>The baseline is the null model. I’ve also defined and fitted the OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest models.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -3190,11 +3191,162 @@ Assessment Metric
 </table>
 </div>
 </div>
-<p>The best model is the random forest model because it has the lowest RMSE.</p>
+<p>The best model is the random forest model because it has the lowest RMSE. It also has a low standard error. So the predictions created by the random forest model should be the closest to the true values.</p>
 </section>
 <section id="eda" class="level2">
 <h2 class="anchored" data-anchor-id="eda">EDA</h2>
+<p>Next, I will do a preliminary EDA to continue on the progress made in Progress Memo 1. This will help decide what interactions to use in my second recipe.</p>
+<p>Below is a correlation plot.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">average_price</th>
+<th style="text-align: right;">total_volume</th>
+<th style="text-align: right;">x4046</th>
+<th style="text-align: right;">x4225</th>
+<th style="text-align: right;">x4770</th>
+<th style="text-align: right;">total_bags</th>
+<th style="text-align: right;">small_bags</th>
+<th style="text-align: right;">large_bags</th>
+<th style="text-align: right;">x_large_bags</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">average_price</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">-0.1927524</td>
+<td style="text-align: right;">-0.2083170</td>
+<td style="text-align: right;">-0.1729278</td>
+<td style="text-align: right;">-0.1794460</td>
+<td style="text-align: right;">-0.1770879</td>
+<td style="text-align: right;">-0.1747298</td>
+<td style="text-align: right;">-0.1729400</td>
+<td style="text-align: right;">-0.1175916</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_volume</td>
+<td style="text-align: right;">-0.1927524</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9778632</td>
+<td style="text-align: right;">0.9741808</td>
+<td style="text-align: right;">0.8722023</td>
+<td style="text-align: right;">0.9630471</td>
+<td style="text-align: right;">0.9672382</td>
+<td style="text-align: right;">0.8806396</td>
+<td style="text-align: right;">0.7471574</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">x4046</td>
+<td style="text-align: right;">-0.2083170</td>
+<td style="text-align: right;">0.9778632</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9261100</td>
+<td style="text-align: right;">0.8333891</td>
+<td style="text-align: right;">0.9200566</td>
+<td style="text-align: right;">0.9252799</td>
+<td style="text-align: right;">0.8386450</td>
+<td style="text-align: right;">0.6993773</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">x4225</td>
+<td style="text-align: right;">-0.1729278</td>
+<td style="text-align: right;">0.9741808</td>
+<td style="text-align: right;">0.9261100</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.8878550</td>
+<td style="text-align: right;">0.9057875</td>
+<td style="text-align: right;">0.9160312</td>
+<td style="text-align: right;">0.8100152</td>
+<td style="text-align: right;">0.6888087</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">x4770</td>
+<td style="text-align: right;">-0.1794460</td>
+<td style="text-align: right;">0.8722023</td>
+<td style="text-align: right;">0.8333891</td>
+<td style="text-align: right;">0.8878550</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.7923143</td>
+<td style="text-align: right;">0.8027330</td>
+<td style="text-align: right;">0.6984710</td>
+<td style="text-align: right;">0.6798611</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_bags</td>
+<td style="text-align: right;">-0.1770879</td>
+<td style="text-align: right;">0.9630471</td>
+<td style="text-align: right;">0.9200566</td>
+<td style="text-align: right;">0.9057875</td>
+<td style="text-align: right;">0.7923143</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9943346</td>
+<td style="text-align: right;">0.9430091</td>
+<td style="text-align: right;">0.8042326</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">small_bags</td>
+<td style="text-align: right;">-0.1747298</td>
+<td style="text-align: right;">0.9672382</td>
+<td style="text-align: right;">0.9252799</td>
+<td style="text-align: right;">0.9160312</td>
+<td style="text-align: right;">0.8027330</td>
+<td style="text-align: right;">0.9943346</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9025889</td>
+<td style="text-align: right;">0.8068446</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">large_bags</td>
+<td style="text-align: right;">-0.1729400</td>
+<td style="text-align: right;">0.8806396</td>
+<td style="text-align: right;">0.8386450</td>
+<td style="text-align: right;">0.8100152</td>
+<td style="text-align: right;">0.6984710</td>
+<td style="text-align: right;">0.9430091</td>
+<td style="text-align: right;">0.9025889</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.7108584</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">x_large_bags</td>
+<td style="text-align: right;">-0.1175916</td>
+<td style="text-align: right;">0.7471574</td>
+<td style="text-align: right;">0.6993773</td>
+<td style="text-align: right;">0.6888087</td>
+<td style="text-align: right;">0.6798611</td>
+<td style="text-align: right;">0.8042326</td>
+<td style="text-align: right;">0.8068446</td>
+<td style="text-align: right;">0.7108584</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>It seems like for my second recipe, I could create interactions between <code>total_bags</code> and <code>small_bags</code>, <code>total_volume</code> and <code>x4046</code>, and <code>total_volume</code> and <code>x4225</code>. (As a reminder, 4046 and 4225 are PLU numbers — numbers used to properly identify avocados sold at retail.)</p>
 </section>
+<section id="how-its-going" class="level2">
+<h2 class="anchored" data-anchor-id="how-its-going">How it’s going</h2>
+<p>I’ve split and folded the data; created a kitchen sink recipe; and fitted null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest models; and found the RMSE and standard error for the model with the lowest RMSE for each model type. Right now, I don’t have any potential issues or concerns.</p>
+<p>Moving forward, I plan to conduct a more comprehensive EDA than the one I did for Progress Memo 1 so that I can determine what interaction terms I should use for my second recipe, and I will tune and fit my other models accordingly so that I can determine the best model overall.</p>
+</section>
+
 
 </main>
 <!-- /main column -->

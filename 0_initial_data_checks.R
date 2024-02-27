@@ -34,3 +34,11 @@ avocado |>
           median = median(average_price, na.rm = TRUE)) |> 
   knitr::kable()
 
+
+# Making a correlation plot
+cor <- avocado |> 
+  select(average_price, total_volume, x4046, x4225, x4770, total_bags, small_bags, large_bags, x_large_bags) |> 
+  cor() |> 
+  knitr::kable()
+
+
