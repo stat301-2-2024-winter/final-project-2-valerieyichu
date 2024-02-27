@@ -111,7 +111,7 @@ The best model is the random forest model because it has the lowest RMSE.
 
 ## How it's going
 
-I've split and folded the data; created a kitchen sink recipe; and fitted null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest models. 
+I've split and folded the data; created a kitchen sink recipe; and fitted null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest models; and found the RMSE and standard error for the model with the lowest RMSE for each model type. 
 
 
 
