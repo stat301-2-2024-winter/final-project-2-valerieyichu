@@ -69,7 +69,7 @@ save(fit_lm,file = here("results/fit_lm.rda"))
 set.seed(301)
 # model specifications ----
 ridge_spec <- 
-  linear_reg(penalty = 0.01, mixture = 0) %>% 
+  linear_reg(penalty = tune(), mixture = 0) %>% 
   set_engine("glmnet") %>% 
   set_mode("regression")
 
@@ -104,7 +104,7 @@ save(fit_ridge, file = here("results/fit_ridge.rda"))
 set.seed(301)
 # model specifications ----
 lasso_spec <- 
-  linear_reg(penalty = 0.01, mixture = 1) %>% 
+  linear_reg(penalty = tune(), mixture = 1) %>% 
   set_engine("glmnet") %>% 
   set_mode("regression")
 
@@ -115,14 +115,24 @@ lasso_wflow <-
   add_recipe(avocado_recipe_param)
 
 # fit workflows/models ----
-fit_lasso <- fit_resamples(
-  lasso_wflow,
-  resamples = avocado_folds,
-  control = control_resamples(
-    save_workflow = TRUE,
-    parallel_over = "everything"
-  )
-)
+# FIX ACCORDINGLY
+tuned_lasso <- tune_grid(bt_workflow,
+                      avocado_folds,
+                      grid = bt_grid,
+                      control = control_grid(save_workflow = TRUE))
+
+# ADD A GRID
+
+
+# # fit workflows/models ----
+# fit_lasso <- fit_resamples(
+#   lasso_wflow,
+#   resamples = avocado_folds,
+#   control = control_resamples(
+#     save_workflow = TRUE,
+#     parallel_over = "everything"
+#   )
+# )
 
 # write out results (fitted/trained workflows) ----
 save(fit_lasso, file = here("results/fit_lasso.rda"))
