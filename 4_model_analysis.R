@@ -70,16 +70,16 @@ simple_tbl_result <- null_results |>
 save(simple_tbl_result, file = "results/simple_tbl_result.rda")
 
 
-## Simpler table; display only RMSE
-# model_results <- as_workflow_set(
-#   null = fit_null,
-#   lm = fit_lm, 
-#   lasso = fit_lasso,
-#   ridge = fit_ridge, 
-#   bt = tuned_bt,
-#   rf = tuned_rf,
-#   knn = tuned_knn
-# )
+# model results
+model_results <- as_workflow_set(
+  null = fit_null,
+  lm = fit_lm,
+  lasso = fit_lasso,
+  ridge = fit_ridge,
+  bt = tuned_bt,
+  rf = tuned_rf,
+  knn = tuned_knn
+)
 
 # show the rmse and standard error for the model with the lowest rmse for each model type
 tbl_result <- model_results |> 
