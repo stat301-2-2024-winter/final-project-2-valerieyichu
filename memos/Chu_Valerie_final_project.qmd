@@ -49,9 +49,12 @@ avocado <- read_csv(here("data/avocado.csv")) |>
 
 ```
 
-## A Quick Overview
+## Introduction
 
 I'm Californian, and avocados are a big thing. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados...
+
+
+## Data Overview
 
 This dataset contains historical data on avocado prices and sales volume in multiple US markets.
 
@@ -83,13 +86,9 @@ These are the definitions for some of the variables:
 - `x4770` - Total number of avocados with PLU 4770 sold
 
 
+## Methods
 
-## The Assessment Metric
-
-The assessment metric is the RMSE.
-
-
-## My Analysis Plan
+This is a regression problem, so the assessment metric I will be using is the RMSE. RMSE calculates the average difference between the model's predicted prices and the actual prices, and it better accounts for outliers, which is important since a preliminary exploration of average price reveals that this variable is slightly skewed right. 
 
 Because this dataset is quite large, at 18,249 observations, I decided to use 70% of this dataset to train the model (12,772 observations) and 30% to test the model (5,477 observations). 
 
@@ -100,7 +99,12 @@ I used these models: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K N
 I will be using a kitchen sink recipe and a recipe with interactions, the latter of which I will create. 
 
 
-## A Table
+## Model Building & Selection
+
+
+
+
+## Final Model Analysis
 
 The table of RMSEs and standard errors created below was made using kitchen recipes. It displays the RMSE and standard error for the model with the lowest RMSE for each model type.
 
@@ -115,7 +119,7 @@ tbl_result |>
 
 The best model is the random forest model because it has the lowest RMSE. It also has a low standard error. So the predictions created by the random forest model should be the closest to the true values.
 
-## EDA
+### EDA
 
 Next, I will do a preliminary EDA to continue on the progress made in Progress Memo 1. This will help decide what interactions to use in my second recipe. 
 
@@ -131,11 +135,16 @@ avocado |>
 It seems like for my second recipe, I could create interactions between `total_bags` and `small_bags`, `total_volume` and `x4046`, and `total_volume` and `x4225`. (As a reminder, 4046 and 4225 are PLU numbers — numbers used to properly identify avocados sold at retail.)
 
 
+## Conclusion
+
 ## How it's going
 
 I've split and folded the data; created a kitchen sink recipe; and fitted null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest models; and found the RMSE and standard error for the model with the lowest RMSE for each model type. Right now, I don't have any potential issues or concerns. 
 
 Moving forward, I plan to conduct a more comprehensive EDA than the one I did for Progress Memo 1 so that I can determine what interaction terms I should use for my second recipe, and I will tune and fit my other models accordingly so that I can determine the best model overall. 
+
+## References
+
 
 ## Appendix A: An exploration of average avocado price 
 

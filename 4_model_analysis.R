@@ -18,8 +18,8 @@ load(here("results/avocado_recipe_param.rda"))
 load(here("results/avocado_recipe_tree.rda"))
 load(here("results/fit_null.rda"))
 load(here("results/fit_lm.rda"))
-load(here("results/fit_lasso.rda"))
-load(here("results/fit_ridge.rda"))
+load(here("results/tuned_lasso.rda"))
+load(here("results/tuned_ridge.rda"))
 load(here("results/tuned_bt.rda"))
 load(here("results/tuned_knn.rda"))
 load(here("results/tuned_rf.rda"))
@@ -32,7 +32,7 @@ registerDoMC(cores = parallel::detectCores(logical = TRUE))
 tidymodels_prefer()
 
 # More complicated table; display RMSE, RSQ
-fit_null |> collect_metrics(metric = "rmse")
+
 null_results <- collect_metrics(fit_null) |> 
   mutate(model = "null")
 
@@ -42,10 +42,10 @@ lm_results <- collect_metrics(fit_lm) |>
 lm_results <- collect_metrics(fit_lm) |> 
   mutate(model = "lm")
 
-lasso_results <- collect_metrics(fit_lasso) |> 
+lasso_results <- collect_metrics(tuned_lasso) |> 
   mutate(model = "lasso")
 
-ridge_results <- collect_metrics(fit_ridge) |> 
+ridge_results <- collect_metrics(tuned_ridge) |> 
   mutate(model = "ridge")
 
 rf_results <- collect_metrics(tuned_rf) |> 
@@ -74,8 +74,8 @@ save(simple_tbl_result, file = "results/simple_tbl_result.rda")
 model_results <- as_workflow_set(
   null = fit_null,
   lm = fit_lm,
-  lasso = fit_lasso,
-  ridge = fit_ridge,
+  lasso = tuned_lasso,
+  ridge = tuned_ridge,
   bt = tuned_bt,
   rf = tuned_rf,
   knn = tuned_knn
@@ -90,7 +90,8 @@ tbl_result <- model_results |>
   select(`Model Type` = wflow_id,
          `RMSE` = mean, 
          `Std Error` = std_err, 
-         `Num Computations` = n) 
+         `Num Computations` = n) |> 
+  distinct()
 
 save(tbl_result, file = "results/tbl_result.rda")
 

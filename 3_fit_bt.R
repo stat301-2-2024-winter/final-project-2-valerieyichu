@@ -53,20 +53,24 @@ tuned_bt <- tune_grid(bt_workflow,
                       grid = bt_grid,
                       control = control_grid(save_workflow = TRUE))
 
-
 # write out results (fitted/trained workflows) ----
 save(tuned_bt, file = here("results/tuned_bt.rda"))
 
-# autoplot
-autoplot(tuned_bt, metric = "rmse") +
-  labs(title = "Boosted Tree")
+# # autoplot
+# autoplot(tuned_bt, metric = "rmse") +
+#   labs(title = "Boosted Tree")
+# 
+# 
+# tuned_bt |> select_best(metric = "rmse")
+# 
+# tbl_bt <- tuned_bt |> 
+#   show_best("rmse") |> 
+#   slice_min(mean) |> 
+#   select(mean, n, std_err) |> 
+#   mutate(model = "Boosted Tree")
 
-
-tuned_bt |> select_best(metric = "rmse")
-
-tbl_bt <- tuned_bt |> 
-  show_best("rmse") |> 
-  slice_min(mean) |> 
-  select(mean, n, std_err) |> 
-  mutate(model = "Boosted Tree")
+# WHEN YOU TUNE AGAIN: 
+autoplot(tuned_bt)
+# when learn rate increases, rmse decreases -> so take the lowest learn rate. And remember that it's exponential. 
+# and then mtry and min_n don't seem to affect rmse too much so probably don't need to tune them
 
