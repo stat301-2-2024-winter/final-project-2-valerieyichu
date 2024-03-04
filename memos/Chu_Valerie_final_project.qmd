@@ -96,7 +96,13 @@ I also resampled my dataset, partitioning the dataset into 10 parts and repeatin
 
 I used these models: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest. 
 
-I will be using a kitchen sink recipe and a recipe with interactions, the latter of which I will create. 
+I will be using a kitchen sink recipe and a feature engineered recipe. 
+
+For the kitchen sink recipes, my goal was to create a very simple, general recipe. I started by predicting the target variable with all other variables. I removed the id, date time, and categorical variables. I filtered out variables with zero variance. Then I centered and scaled all predictors. 
+
+I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, as well as other variables in the dataset. There are only 9 numeric variables, and since the correlation between all of them ??????????? was quite strong, I kept them all in. Once again, I removed the id, date time, and categorical variables, but this time, I kept in `type` (see Appendix A: there are only 2 types of avocados - conventional and organic - so it makes sense to dummy `type`). This time, I added interaction terms. 
+
+A few additional notes on my feature engineered recipes: There is no missingness in my data, so I don't need to impute. Avocado prices and bag numbers tend to be within a similar range, so there's no need to log transform. 
 
 
 ## Model Building & Selection
