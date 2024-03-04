@@ -14,14 +14,14 @@ load(here("results/avocado_split.rda"))
 
 # Feature Engineered Parametric Recipe
 # Recipe for ordinary linear regression, lasso, ridge
-avocado_recipe_param <- recipe(average_price ~ ., data = avocado_train) |> 
+avocado_recipe_param_2 <- recipe(average_price ~ ., data = avocado_train) |> 
   step_rm(x1, date, year, region) |> 
   step_dummy(type) |> 
-  step_interact(~ type:total_volume) |> 
+  step_interact(~ total_volume:starts_with("type_")) |> 
   step_nzv(all_predictors()) |> 
   step_normalize(all_predictors())
 
-prep(avocado_recipe_param) |> 
+prep(avocado_recipe_param_2) |> 
   bake(new_data = NULL)
 
 save(avocado_recipe_param, file = "results/avocado_recipe_param.rda")
