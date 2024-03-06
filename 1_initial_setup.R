@@ -12,7 +12,10 @@ tidymodels_prefer()
 
 # Load Dataset
 avocado <- read_csv(here("data/avocado.csv")) |> 
-  janitor::clean_names()
+  janitor::clean_names() |> 
+  mutate(type = factor(type),
+         year = factor(year),
+         region = factor(region))
 
 # split the data
 # set seed for random split
