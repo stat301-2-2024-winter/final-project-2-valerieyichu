@@ -98,15 +98,26 @@ I used these models: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K N
 
 I will be using a kitchen sink recipe and a feature engineered recipe. 
 
-For the kitchen sink recipes, my goal was to create a very simple, general recipe. I started by predicting the target variable with all other variables. I removed the id, date, and region. This is because the id variable will perfectly predict each observation which isn't useful. I removed date because the useful information is already in the year variable, so it's redundant to keep it in. I removed region because there would be 54 factored levels and that would take too much computational time. I filtered out variables with zero variance. Then I centered and scaled all predictors. 
+For the kitchen sink recipes, my goal was to create a very simple, general recipe. 
 
-I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, as well as other variables in the dataset. 
+- I started by predicting the target variable with all other variables. 
 
-- There are only 9 numeric variables, and since the correlation between all of them ??????????? was quite strong, I kept them all in. 
+- I removed the id variable, date, and region. This is because the id variable will perfectly predict each observation which isn't useful. I removed date because the useful information is already in the year variable, so it's redundant to keep it in. I removed region because there would be 54 factored levels and that took too much computational time. 
 
-- Once again, I removed the id, date time, and categorical variables, but this time, I kept in `type` (see Appendix A: there are only 2 types of avocados - conventional and organic - so it makes sense to dummy `type`). 
+- I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.
 
-- This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I was curious about whether the type of avocado has an effect on the total number of avocados sold. 
+- I filtered out variables with zero variance. 
+
+- Then I centered and scaled all predictors. 
+
+
+I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, and other variables in the dataset. See Appendix B for more information.
+
+- I removed the id variable, date, and region for the same reasons as the kitchen sink recipe. 
+
+- I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.
+
+- This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the  
 
 A few additional notes on my feature engineered recipes: 
 
@@ -187,17 +198,12 @@ Let's explore the variable `average_price`.
 ```{r}
 #| echo: false
 
-avocado_train |> 
+avocado |> 
   ggplot(aes(x = average_price)) +
   geom_boxplot() +
   scale_x_continuous(breaks = seq(0, 4, 0.5)) +
   theme_minimal()
 
-```
-```{r}
-avocado_train |> 
-  ggplot(aes(x = log(average_price))) +
-  geom_density()
 ```
 
 
@@ -225,5 +231,23 @@ avocado |>
   knitr::kable()
 
 ```
+
+## Appendix B
+
+```{r}
+avocado_train |> 
+  ggplot(aes(x = log(average_price))) +
+  geom_density()
+```
+
+```{r}
+avocado_train |> 
+  ggplot(aes(x = log(average_price))) +
+  geom_density()
+```
+
+
+
+
 
 

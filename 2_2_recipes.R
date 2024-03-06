@@ -35,7 +35,7 @@ avocado_recipe_tree <- recipe(average_price ~ .,
                           data = avocado_train) |> 
   step_rm(x1, date, type, year, region) |> 
   step_dummy(all_nominal_predictors(), one_hot = TRUE) |> 
-  step_zv(all_predictors()) |> 
+  step_nzv(all_predictors()) |> 
   step_normalize(all_predictors())
 
 prep(avocado_recipe_tree) |> 
