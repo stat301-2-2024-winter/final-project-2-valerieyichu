@@ -15,7 +15,7 @@ load(here("results/avocado_folds.rda"))
 load(here("results/avocado_recipe_param.rda"))
 load(here("results/avocado_recipe_tree.rda"))
 
-## Density Plots to Determine if I should log transform
+## Density Plots to Determine if I should log transform ----
 
 avocado_train |> 
   ggplot(aes(x = average_price)) +
@@ -142,5 +142,19 @@ avocado_train |>
 # region doesn't need log transform
 
 
+## Determining interaction terms
+
+avocado_train |> 
+  ggplot(aes(x = type, y = total_volume)) +
+  geom_boxplot()
+
+
+## Determining spline
+
+avocado_train |> 
+  ggplot(aes(x = log(total_volume), y = average_price)) +
+  geom_point() +
+  geom_smooth()
+# we can use a spline of 1 for total_volume
 
 
