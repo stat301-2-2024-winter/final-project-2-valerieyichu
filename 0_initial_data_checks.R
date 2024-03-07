@@ -45,9 +45,12 @@ cor <- avocado |>
 
 avocado |> select(type) |> distinct()
 # There are only 2 types of avocados - organic, and conventional. 
-# So in my feature engineered recipes, `type` will be dummied
+# So in my recipes, `type` will be dummied
 
 avocado |> select(region) |> distinct()
 # There are 54 regions these avocados are grown in. 
-# So in my feature engineered recipes, I will remove `region` instead of dummying it. 
+# So in my recipes, I will remove `region` instead of dummying it because 
+# 54 factored levels and that took too much computational time. 
+
+
 

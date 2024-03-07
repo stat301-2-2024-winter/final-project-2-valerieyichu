@@ -12,7 +12,7 @@ tidymodels_prefer()
 ## Recipes ----
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_folds.rda"))
-load(here("results/avocado_recipe_param.rda"))
+load(here("results/avocado_recipe_param_2.rda"))
 
 library(doMC)
 registerDoMC(cores = parallel::detectCores(logical = TRUE))
@@ -21,19 +21,23 @@ registerDoMC(cores = parallel::detectCores(logical = TRUE))
 tidymodels_prefer()
 
 # Null Model
-null_spec <- null_model() %>% 
+null_spec_2 <- null_model() %>% 
 set_engine("parsnip") %>% 
   set_mode("regression") 
 
-null_workflow <- workflow() %>% 
-  add_model(null_spec) %>% 
-  add_recipe(avocado_recipe_param)
+null_workflow_2 <- workflow() %>% 
+  add_model(null_spec_2) %>% 
+  add_recipe(avocado_recipe_param_2)
 
-fit_null <- null_workflow |> 
+fit_null_2 <- null_workflow |> 
   fit_resamples(
     resamples = avocado_folds, 
     control = control_resamples(save_workflow = TRUE)
   )
+
+null_results_2 <- collect_metrics(fit_null_2) |> 
+  mutate(model = "null")
+
 
 save(fit_null,file = here("results/fit_null.rda"))
 
