@@ -12,8 +12,8 @@ tidymodels_prefer()
 ## Recipes ----
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_folds.rda"))
-load(here("results/avocado_recipe_param.rda"))
-load(here("results/avocado_recipe_tree.rda"))
+load(here("results/avocado_recipe_param_2.rda"))
+load(here("results/avocado_recipe_tree_2.rda"))
 
 library(doMC)
 registerDoMC(cores = parallel::detectCores(logical = TRUE))
@@ -28,20 +28,20 @@ tidymodels_prefer()
 
 set.seed(301)
 # model specifications ----
-lm_spec <- 
+lm_spec_2 <- 
   linear_reg() |> 
   set_engine("lm") |> 
   set_mode("regression") 
 
 # define workflows ----
-lm_wflow <- 
+lm_wflow_2 <- 
   workflow() |> 
-  add_model(lm_spec) |> 
-  add_recipe(avocado_recipe_param)
+  add_model(lm_spec_2) |> 
+  add_recipe(avocado_recipe_param_2)
 
 # fit workflows/models ----
-fit_lm <- fit_resamples(
-  lm_wflow,
+fit_lm_2 <- fit_resamples(
+  lm_wflow_2,
   resamples = avocado_folds,
   control = control_resamples(
     save_workflow = TRUE,
@@ -49,8 +49,11 @@ fit_lm <- fit_resamples(
   )
 )
 
+lm_results_2 <- collect_metrics(fit_lm_2) |> 
+  mutate(model = "lm")
+
 # write out results (fitted/trained workflows) ----
-save(fit_lm,file = here("results/fit_lm.rda"))
+save(fit_lm_2,file = here("results/fit_lm_2.rda"))
 
 # inspecting model fit
 # fit_lm |> tidy()

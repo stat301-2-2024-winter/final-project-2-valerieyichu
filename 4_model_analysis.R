@@ -39,9 +39,6 @@ null_results <- collect_metrics(fit_null) |>
 lm_results <- collect_metrics(fit_lm) |> 
   mutate(model = "lm")
 
-lm_results <- collect_metrics(fit_lm) |> 
-  mutate(model = "lm")
-
 lasso_results <- collect_metrics(tuned_lasso) |> 
   mutate(model = "lasso")
 
