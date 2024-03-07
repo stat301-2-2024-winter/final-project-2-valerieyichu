@@ -13,7 +13,7 @@ tidymodels_prefer()
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_folds.rda"))
 load(here("results/avocado_recipe_param_2.rda"))
-load(here("results/avocado_recipe_tree_2.rda"))
+# load(here("results/avocado_recipe_tree_2.rda"))
 
 library(doMC)
 registerDoMC(cores = parallel::detectCores(logical = TRUE))
