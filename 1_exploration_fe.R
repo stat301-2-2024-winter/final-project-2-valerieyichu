@@ -35,7 +35,7 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(total_volume))) +
   geom_density()
-# total_volume needs log transform
+# total_volume *could* use log transform
 
 
 
@@ -46,7 +46,8 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(x4046))) +
   geom_density()
-# x4046 needs log transform
+# x4046 could use log transform, but it has several values of 0, 
+# so doing so will produce NaN and I don't want that.
 
 
 
@@ -57,7 +58,8 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(x4225))) +
   geom_density()
-# x4225 needs log transform
+# x4225 could use log transform, but it has several values of 0, 
+# so doing so will produce NaN and I don't want that.
 
 
 
@@ -68,7 +70,8 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(x4770))) +
   geom_density()
-# x4770 needs log transform
+# x4770 could use log transform, but it has several values of 0, 
+# so doing so will produce NaN and I don't want that.
 
 
 
@@ -79,7 +82,8 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(total_bags))) +
   geom_density()
-# total_bags needs log transform
+# total_bags could use log transform, but it has several values of 0, 
+# so doing so will produce NaN and I don't want that.
 
 
 
@@ -90,7 +94,8 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(small_bags))) +
   geom_density()
-# small_bags needs log transform
+# small_bags could use log transform, but it has several values of 0, 
+# so doing so will produce NaN and I don't want that.
 
 
 
@@ -101,7 +106,8 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(large_bags))) +
   geom_density()
-# large_bags needs log transform
+# large_bags could use log transform, but it has several values of 0, 
+# so doing so will produce NaN and I don't want that.
 
 
 
@@ -112,7 +118,8 @@ avocado_train |>
 avocado_train |> 
   ggplot(aes(x = log(x_large_bags))) +
   geom_density()
-# x_large_bags needs log transform
+# x_large_bags could use log transform, but it has several values of 0, 
+# so doing so will produce NaN and I don't want that.
 
 
 
@@ -176,10 +183,12 @@ avocado_train |>
 # The types of avocados (the variables that start with x). 
 
 
+
+
 ## A note ----
 # I was going to consider a step_ns, but the relationships between the predictor 
 # variables and average price seem to be pretty linear, 
-# and I don't see the need for it / unless I run the risk of overfitting. 
+# and I don't see the need for it unless I run the risk of overfitting. 
 
 ## Determining spline
 

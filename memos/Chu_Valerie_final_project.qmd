@@ -106,26 +106,32 @@ For the kitchen sink recipes, my goal was to create a very simple, general recip
 
 - I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.
 
-- I filtered out variables with zero variance. 
+- I filtered out variables with near zero variance. 
 
 - Then I centered and scaled all predictors. 
 
 
-I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, and other variables in the dataset. See Appendix B for more information.
+I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, and other variables in the dataset. See `1_exploration_fe` for more information.
 
 - I removed the id variable, date, and region for the same reasons as the kitchen sink recipe. 
 
 - I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.
 
-- This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the  
+- This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the avocado type 4770 and extra large bags. This is due to two reasons. First, the Hass Avocado Board ^[https://loveonetoday.com/how-to/identify-hass-avocados/] describes avocado PLU 4770 as extra large avocados. That means there should be a relationship between it and extra large bags, potentially with some avocado PLU 4225 mixed up in there due to 4225 being large avocados. Second, the relationship between avocado type 4770 and extra large bags is, oddly enough, non linear. That means any interaction term created with them will not simply be a bunch of constants, which could help improve our modeling accuracy. 
+
+- I filtered out variables with near zero variance. 
+
+- Then I centered and scaled all predictors. 
+
 
 A few additional notes on my feature engineered recipes: 
 
 - There is no missingness in my data, so I don't need to impute. 
 
-- Avocado prices and bag numbers tend to be within a similar range, so there's no need to log transform. 
+- I did not log transform anything because several of my predictor values had zeros, so transforming will produce NaN values and I don't want that. Also, the distribution of average price looked fine and didn't warrant a log transformation. 
 
-- CHECK FOR SPLINES ????
+- I was going to consider adding a natural spline basis function to my featured engineered recipes, but the relationships between the predictor variables and average price seem to be pretty linear, and I don't see the need for it unless I run the risk of overfitting. 
+
 
 ## Model Building & Selection
 

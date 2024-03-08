@@ -65,28 +65,31 @@ save(fit_lm_2,file = here("results/fit_lm_2.rda"))
 
 set.seed(301)
 # model specifications ----
-ridge_spec <- 
+ridge_spec_2 <- 
   linear_reg(penalty = tune(), mixture = 0) %>% 
   set_engine("glmnet") %>% 
   set_mode("regression")
 
 # define workflows ----
-ridge_wflow <- 
+ridge_wflow_2 <- 
   workflow() |> 
-  add_model(ridge_spec) |> 
-  add_recipe(avocado_recipe_param)
+  add_model(ridge_spec_2) |> 
+  add_recipe(avocado_recipe_param_2)
 
 # fit workflows/models ----
-ridge_params <- extract_parameter_set_dials(ridge_spec)
+ridge_params_2 <- extract_parameter_set_dials(ridge_spec_2)
 
-ridge_grid <- grid_regular(ridge_params, levels = 5)
+ridge_grid_2 <- grid_regular(ridge_params_2, levels = 5)
 
-tuned_ridge <- tune_grid(ridge_wflow,
+tuned_ridge_2 <- tune_grid(ridge_wflow_2,
                          avocado_folds,
-                         grid = ridge_grid,
+                         grid = ridge_grid_2,
                          control = control_grid(save_workflow = TRUE))
 
-save(tuned_ridge, file = here("results/tuned_ridge.rda"))
+ridge_results_2 <- collect_metrics(tuned_ridge_2) |> 
+  mutate(model = "ridge")
+
+save(tuned_ridge_2, file = here("results/tuned_ridge.rda"))
 
 
 
@@ -96,28 +99,31 @@ save(tuned_ridge, file = here("results/tuned_ridge.rda"))
 
 set.seed(301)
 # model specifications ----
-lasso_spec <- 
+lasso_spec_2 <- 
   linear_reg(penalty = tune(), mixture = 1) %>% 
   set_engine("glmnet") %>% 
   set_mode("regression")
 
 # define workflows ----
-lasso_wflow <- 
+lasso_wflow_2 <- 
   workflow() |> 
-  add_model(lasso_spec) |> 
-  add_recipe(avocado_recipe_param)
+  add_model(lasso_spec_2) |> 
+  add_recipe(avocado_recipe_param_2)
 
 # fit workflows/models ----
-lasso_params <- extract_parameter_set_dials(lasso_spec)
+lasso_params_2 <- extract_parameter_set_dials(lasso_spec_2)
 
-lasso_grid <- grid_regular(lasso_params, levels = 5)
+lasso_grid_2 <- grid_regular(lasso_params_2, levels = 5)
 
-tuned_lasso <- tune_grid(lasso_wflow,
+tuned_lasso_2 <- tune_grid(lasso_wflow_2,
                       avocado_folds,
-                      grid = lasso_grid,
+                      grid = lasso_grid_2,
                       control = control_grid(save_workflow = TRUE))
 
-save(tuned_lasso, file = here("results/tuned_lasso.rda"))
+lasso_results_2 <- collect_metrics(tuned_lasso_2) |> 
+  mutate(model = "lasso")
+
+save(tuned_lasso_2, file = here("results/tuned_lasso_2.rda"))
 
 
 
