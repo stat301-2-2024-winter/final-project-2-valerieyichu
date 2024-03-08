@@ -39,7 +39,7 @@ null_results_2 <- collect_metrics(fit_null_2) |>
   mutate(model = "null")
 
 
-save(fit_null,file = here("results/fit_null.rda"))
+save(fit_null_2,file = here("results/fit_null_2.rda"))
 
 
 
