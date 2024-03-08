@@ -29,15 +29,11 @@ null_workflow_2 <- workflow() %>%
   add_model(null_spec_2) %>% 
   add_recipe(avocado_recipe_param_2)
 
-fit_null_2 <- null_workflow |> 
+fit_null_2 <- null_workflow_2 |> 
   fit_resamples(
     resamples = avocado_folds, 
     control = control_resamples(save_workflow = TRUE)
   )
-
-null_results_2 <- collect_metrics(fit_null_2) |> 
-  mutate(model = "null")
-
 
 save(fit_null_2,file = here("results/fit_null_2.rda"))
 
