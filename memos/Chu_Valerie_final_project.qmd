@@ -39,6 +39,30 @@ library(here)
 # handle common conflicts
 tidymodels_prefer()
 
+# load packages
+load(here("results/avocado_split.rda"))
+load(here("results/avocado_recipe_param.rda"))
+load(here("results/avocado_recipe_tree.rda"))
+load(here("results/fit_null.rda"))
+load(here("results/fit_lm.rda"))
+load(here("results/tuned_lasso.rda"))
+load(here("results/tuned_ridge.rda"))
+load(here("results/tuned_bt.rda"))
+load(here("results/tuned_knn.rda"))
+load(here("results/tuned_rf.rda"))
+load(here("results/tbl_result.rda"))
+
+load(here("results/avocado_recipe_param_2.rda"))
+load(here("results/avocado_recipe_tree_2.rda"))
+load(here("results/fit_null_2.rda"))
+load(here("results/fit_lm_2.rda"))
+load(here("results/tuned_lasso_2.rda"))
+load(here("results/tuned_ridge_2.rda"))
+load(here("results/tuned_bt_2.rda"))
+load(here("results/tuned_knn_2.rda"))
+load(here("results/tuned_rf_2.rda"))
+load(here("results/tbl_result_2.rda"))
+
 ```
 
 
@@ -50,8 +74,11 @@ avocado <- read_csv(here("data/avocado.csv")) |>
 ```
 
 ## Introduction
+Introduce your problem(s)/objective(s). Discuss why you are trying to predict this variable (motivation). Why is this useful? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should site those in your References.
 
-I'm Californian, and avocados are a big thing. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados...
+
+
+I'm Californian, and I love avocados. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados...
 
 
 ## Data Overview
@@ -89,6 +116,24 @@ These are the definitions for some of the variables:
 ## Methods
 
 This is a regression problem, so the assessment metric I will be using is the RMSE. RMSE calculates the average difference between the model's predicted prices and the actual prices, and it better accounts for outliers, which is important since a preliminary exploration of average price reveals that this variable is slightly skewed right. 
+
+
+I will be using the following model types: null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest.
+
+- The null model is the simplest possible baseline model. I am using it a benchmark/reference model to help me ultimately decide whether building increasingly complex models would be worth the effort and expense. There is nothing to tune for this model. 
+
+- The ordinary linear regression model is a simple parametric model that uses the traditional method of least squares to solve for model parameters. I am using it as simple model to compare other models against. There is nothing to tune for this model. 
+
+- The lasso model is a regularized regression, parametric model with a mixture of 1 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model. 
+
+- The ridge model a regularized regression, parametric model with a mixture of 0 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model. 
+
+- The boosted tree model is a non-parametric model where multiple sequential simple regression trees are combined into a stronger model, and each tree is trained on the residuals from the previous sequence of trees. All trees are then combined together using an additive model, whose weights are estimated via the gradient descent procedure. I am using it as a model to compare other models against. I tuned the mtry, min_n, and learn_rate for this model. 
+
+- The k nearest neighbors model is a non-parametric model that uses the K most similar data points from the training set to predict new samples. I am using it as a model to compare other models against. I tuned the neighbors for this model. 
+
+- The random forest model is a non-parametric model that creates a large number of decision trees, each independent of the others. The final prediction uses all predictions from the individual trees and combines them, making this model type resistant to outliers. I am using it as a model to compare other models against. I tuned the mtry and min_n for this model. 
+
 
 Because this dataset is quite large, at 18,249 observations, I decided to use 70% of this dataset to train the model (12,772 observations) and 30% to test the model (5,477 observations). 
 
@@ -145,7 +190,6 @@ The table of RMSEs and standard errors created below was made using kitchen reci
 The baseline is the null model. I've also defined and fitted the OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest models. 
 
 ```{r, echo = FALSE}
-load(here("results/tbl_result.rda"))
 tbl_result |> 
   knitr::kable()
 
@@ -170,12 +214,7 @@ It seems like for my second recipe, I could create interactions between `total_b
 
 
 ## Conclusion
-
-## How it's going
-
-I've split and folded the data; created a kitchen sink recipe; and fitted null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest models; and found the RMSE and standard error for the model with the lowest RMSE for each model type. Right now, I don't have any potential issues or concerns. 
-
-Moving forward, I plan to conduct a more comprehensive EDA than the one I did for Progress Memo 1 so that I can determine what interaction terms I should use for my second recipe, and I will tune and fit my other models accordingly so that I can determine the best model overall. 
+ 
 
 ## References
 
@@ -237,21 +276,6 @@ avocado |>
   knitr::kable()
 
 ```
-
-## Appendix B
-
-```{r}
-avocado_train |> 
-  ggplot(aes(x = log(average_price))) +
-  geom_density()
-```
-
-```{r}
-avocado_train |> 
-  ggplot(aes(x = log(average_price))) +
-  geom_density()
-```
-
 
 
 

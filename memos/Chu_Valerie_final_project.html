@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Valerie Chu">
-<meta name="dcterms.date" content="2024-03-06">
+<meta name="dcterms.date" content="2024-03-08">
 
 <title>An Analysis of Avocados</title>
 <style>
@@ -3050,7 +3050,6 @@ vertical-align: -.125em;
   <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
-  <li><a href="#how-its-going" id="toc-how-its-going" class="nav-link" data-scroll-target="#how-its-going">How it’s going</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   <li><a href="#appendix-a-an-exploration-of-average-avocado-price" id="toc-appendix-a-an-exploration-of-average-avocado-price" class="nav-link" data-scroll-target="#appendix-a-an-exploration-of-average-avocado-price">Appendix A: An exploration of average avocado price</a></li>
   </ul>
@@ -3079,7 +3078,7 @@ Data Science 2 with R (STAT 301-2)</div><p></p>
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">March 6, 2024</p>
+      <p class="date">March 8, 2024</p>
     </div>
   </div>
   
@@ -3106,7 +3105,8 @@ Github Repo Link
 </div>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>I’m Californian, and avocados are a big thing. There’s avocado toast, avocado spread, avocado in salad, and much more. That’s why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados…</p>
+<p>Introduce your problem(s)/objective(s). Discuss why you are trying to predict this variable (motivation). Why is this useful? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should site those in your References.</p>
+<p>I’m Californian, and I love avocados. There’s avocado toast, avocado spread, avocado in salad, and much more. That’s why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados…</p>
 </section>
 <section id="data-overview" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="data-overview">Data Overview</h2>
@@ -3127,25 +3127,44 @@ Github Repo Link
 <li><p><code>x4770</code> - Total number of avocados with PLU 4770 sold</p></li>
 </ul>
 </section>
-<section id="methods" class="level2">
+<section id="methods" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
 <p>This is a regression problem, so the assessment metric I will be using is the RMSE. RMSE calculates the average difference between the model’s predicted prices and the actual prices, and it better accounts for outliers, which is important since a preliminary exploration of average price reveals that this variable is slightly skewed right.</p>
+<p>I will be using the following model types: null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest.</p>
+<ul>
+<li><p>The null model is the simplest possible baseline model. I am using it a benchmark/reference model to help me ultimately decide whether building increasingly complex models would be worth the effort and expense. There is nothing to tune for this model.</p></li>
+<li><p>The ordinary linear regression model is a simple parametric model that uses the traditional method of least squares to solve for model parameters. I am using it as simple model to compare other models against. There is nothing to tune for this model.</p></li>
+<li><p>The lasso model is a regularized regression, parametric model with a mixture of 1 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model.</p></li>
+<li><p>The ridge model a regularized regression, parametric model with a mixture of 0 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model.</p></li>
+<li><p>The boosted tree model is a non-parametric model where multiple sequential simple regression trees are combined into a stronger model, and each tree is trained on the residuals from the previous sequence of trees. All trees are then combined together using an additive model, whose weights are estimated via the gradient descent procedure. I am using it as a model to compare other models against. I tuned the mtry, min_n, and learn_rate for this model.</p></li>
+<li><p>The k nearest neighbors model is a non-parametric model that uses the K most similar data points from the training set to predict new samples. I am using it as a model to compare other models against. I tuned the neighbors for this model.</p></li>
+<li><p>The random forest model is a non-parametric model that creates a large number of decision trees, each independent of the others. The final prediction uses all predictions from the individual trees and combines them, making this model type resistant to outliers. I am using it as a model to compare other models against. I tuned the mtry and min_n for this model.</p></li>
+</ul>
 <p>Because this dataset is quite large, at 18,249 observations, I decided to use 70% of this dataset to train the model (12,772 observations) and 30% to test the model (5,477 observations).</p>
 <p>I also resampled my dataset, partitioning the dataset into 10 parts and repeating this 5 more times. Training the model like this across multiple subsets of data lets us measure the average performance across all these partitions. This lets us better quantify the variability of our data and get better estimates, while also preventing overfitting. So 1,277 observations will be in the assessment set and 11,494 observations will be in the training set.</p>
 <p>I used these models: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest.</p>
 <p>I will be using a kitchen sink recipe and a feature engineered recipe.</p>
-<p>For the kitchen sink recipes, my goal was to create a very simple, general recipe. I started by predicting the target variable with all other variables. I removed the id, date time, and categorical variables. I filtered out variables with zero variance. Then I centered and scaled all predictors.</p>
-<p>I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, as well as other variables in the dataset.</p>
+<p>For the kitchen sink recipes, my goal was to create a very simple, general recipe.</p>
 <ul>
-<li><p>There are only 9 numeric variables, and since the correlation between all of them ??????????? was quite strong, I kept them all in.</p></li>
-<li><p>Once again, I removed the id, date time, and categorical variables, but this time, I kept in <code>type</code> (see Appendix A: there are only 2 types of avocados - conventional and organic - so it makes sense to dummy <code>type</code>).</p></li>
-<li><p>This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I was curious about whether the type of avocado has an effect on the total number of avocados sold.</p></li>
+<li><p>I started by predicting the target variable with all other variables.</p></li>
+<li><p>I removed the id variable, date, and region. This is because the id variable will perfectly predict each observation which isn’t useful. I removed date because the useful information is already in the year variable, so it’s redundant to keep it in. I removed region because there would be 54 factored levels and that took too much computational time.</p></li>
+<li><p>I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.</p></li>
+<li><p>I filtered out variables with near zero variance.</p></li>
+<li><p>Then I centered and scaled all predictors.</p></li>
 </ul>
-<p>A few additional notes on my feature engineered recipes:</p>
+<p>I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, and other variables in the dataset. See <code>1_exploration_fe</code> for more information.</p>
+<ul>
+<li><p>I removed the id variable, date, and region for the same reasons as the kitchen sink recipe.</p></li>
+<li><p>I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.</p></li>
+<li><p>This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the avocado type 4770 and extra large bags. This is due to two reasons. First, the Hass Avocado Board <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> describes avocado PLU 4770 as extra large avocados. That means there should be a relationship between it and extra large bags, potentially with some avocado PLU 4225 mixed up in there due to 4225 being large avocados. Second, the relationship between avocado type 4770 and extra large bags is, oddly enough, non linear. That means any interaction term created with them will not simply be a bunch of constants, which could help improve our modeling accuracy.</p></li>
+<li><p>I filtered out variables with near zero variance.</p></li>
+<li><p>Then I centered and scaled all predictors.</p></li>
+</ul>
+<div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup> https://loveonetoday.com/how-to/identify-hass-avocados/</p></li></div><p>A few additional notes on my feature engineered recipes:</p>
 <ul>
 <li><p>There is no missingness in my data, so I don’t need to impute.</p></li>
-<li><p>Avocado prices and bag numbers tend to be within a similar range, so there’s no need to log transform.</p></li>
-<li><p>CHECK FOR SPLINES ????</p></li>
+<li><p>I did not log transform anything because several of my predictor values had zeros, so transforming will produce NaN values and I don’t want that. Also, the distribution of average price looked fine and didn’t warrant a log transformation.</p></li>
+<li><p>I was going to consider adding a natural spline basis function to my featured engineered recipes, but the relationships between the predictor variables and average price seem to be pretty linear, and I don’t see the need for it unless I run the risk of overfitting.</p></li>
 </ul>
 </section>
 <section id="model-building-selection" class="level2">
@@ -3169,71 +3188,41 @@ Github Repo Link
 <tbody>
 <tr class="odd">
 <td style="text-align: left;">rf</td>
-<td style="text-align: right;">0.1976139</td>
-<td style="text-align: right;">0.0009191</td>
+<td style="text-align: right;">0.1741481</td>
+<td style="text-align: right;">0.0008751</td>
 <td style="text-align: right;">50</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">knn</td>
-<td style="text-align: right;">0.2254642</td>
-<td style="text-align: right;">0.0010055</td>
+<td style="text-align: right;">0.1997596</td>
+<td style="text-align: right;">0.0011066</td>
 <td style="text-align: right;">50</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">bt</td>
-<td style="text-align: right;">0.2336973</td>
-<td style="text-align: right;">0.0009051</td>
+<td style="text-align: right;">0.2134185</td>
+<td style="text-align: right;">0.0008817</td>
 <td style="text-align: right;">50</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">lasso</td>
-<td style="text-align: right;">0.3880860</td>
-<td style="text-align: right;">0.0007970</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">lasso</td>
-<td style="text-align: right;">0.3880860</td>
-<td style="text-align: right;">0.0007970</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">lasso</td>
-<td style="text-align: right;">0.3880860</td>
-<td style="text-align: right;">0.0007970</td>
+<td style="text-align: right;">0.3003404</td>
+<td style="text-align: right;">0.0009083</td>
 <td style="text-align: right;">50</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">lm</td>
-<td style="text-align: right;">0.3881945</td>
-<td style="text-align: right;">0.0008103</td>
+<td style="text-align: right;">0.3003657</td>
+<td style="text-align: right;">0.0009079</td>
 <td style="text-align: right;">50</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">ridge</td>
-<td style="text-align: right;">0.3882065</td>
-<td style="text-align: right;">0.0007890</td>
+<td style="text-align: right;">0.3014926</td>
+<td style="text-align: right;">0.0008964</td>
 <td style="text-align: right;">50</td>
 </tr>
 <tr class="odd">
-<td style="text-align: left;">ridge</td>
-<td style="text-align: right;">0.3882065</td>
-<td style="text-align: right;">0.0007890</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ridge</td>
-<td style="text-align: right;">0.3882065</td>
-<td style="text-align: right;">0.0007890</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">ridge</td>
-<td style="text-align: right;">0.3882065</td>
-<td style="text-align: right;">0.0007890</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
 <td style="text-align: left;">null</td>
 <td style="text-align: right;">0.3988374</td>
 <td style="text-align: right;">0.0007374</td>
@@ -3395,11 +3384,6 @@ Github Repo Link
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-</section>
-<section id="how-its-going" class="level2">
-<h2 class="anchored" data-anchor-id="how-its-going">How it’s going</h2>
-<p>I’ve split and folded the data; created a kitchen sink recipe; and fitted null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest models; and found the RMSE and standard error for the model with the lowest RMSE for each model type. Right now, I don’t have any potential issues or concerns.</p>
-<p>Moving forward, I plan to conduct a more comprehensive EDA than the one I did for Progress Memo 1 so that I can determine what interaction terms I should use for my second recipe, and I will tune and fit my other models accordingly so that I can determine the best model overall.</p>
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
