@@ -13,7 +13,7 @@ tidymodels_prefer()
 load(here("results/avocado_split.rda"))
 load(here("results/avocado_folds.rda"))
 load(here("results/avocado_recipe_param_2.rda"))
-# load(here("results/avocado_recipe_tree_2.rda"))
+load(here("results/avocado_recipe_tree_2.rda"))
 
 library(doMC)
 registerDoMC(cores = parallel::detectCores(logical = TRUE))
@@ -89,7 +89,7 @@ tuned_ridge_2 <- tune_grid(ridge_wflow_2,
 ridge_results_2 <- collect_metrics(tuned_ridge_2) |> 
   mutate(model = "ridge")
 
-save(tuned_ridge_2, file = here("results/tuned_ridge.rda"))
+save(tuned_ridge_2, file = here("results/tuned_ridge_2.rda"))
 
 
 
