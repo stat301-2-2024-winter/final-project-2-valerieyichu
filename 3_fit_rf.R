@@ -41,7 +41,7 @@ rf_wflow <-
 
 # hyperparameter tuning values ----
 rf_params <- extract_parameter_set_dials(rf_spec) |> 
-  update(mtry = mtry(range = c(1, 9)))
+  update(mtry = mtry(range = c(1, 14)))
 
 rf_grid <- grid_regular(rf_params, levels = 5)
 
