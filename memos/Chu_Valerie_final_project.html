@@ -3043,7 +3043,13 @@ vertical-align: -.125em;
   <ul>
   <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
   <li><a href="#data-overview" id="toc-data-overview" class="nav-link" data-scroll-target="#data-overview">Data Overview</a></li>
-  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a></li>
+  <li><a href="#methods" id="toc-methods" class="nav-link" data-scroll-target="#methods">Methods</a>
+  <ul class="collapse">
+  <li><a href="#data-splitting-procedure" id="toc-data-splitting-procedure" class="nav-link" data-scroll-target="#data-splitting-procedure">Data Splitting Procedure</a></li>
+  <li><a href="#resampling-technique" id="toc-resampling-technique" class="nav-link" data-scroll-target="#resampling-technique">Resampling Technique</a></li>
+  <li><a href="#model-types" id="toc-model-types" class="nav-link" data-scroll-target="#model-types">Model Types</a></li>
+  <li><a href="#recipes" id="toc-recipes" class="nav-link" data-scroll-target="#recipes">Recipes</a></li>
+  </ul></li>
   <li><a href="#model-building-selection" id="toc-model-building-selection" class="nav-link" data-scroll-target="#model-building-selection">Model Building &amp; Selection</a></li>
   <li><a href="#final-model-analysis" id="toc-final-model-analysis" class="nav-link" data-scroll-target="#final-model-analysis">Final Model Analysis</a>
   <ul class="collapse">
@@ -3103,18 +3109,16 @@ Github Repo Link
 <p><a href="https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git">https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git</a></p>
 </div>
 </div>
-<section id="introduction" class="level2">
+<section id="introduction" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>Introduce your problem(s)/objective(s). Discuss why you are trying to predict this variable (motivation). Why is this useful? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should site those in your References.</p>
 <p>I’m Californian, and I love avocados. There’s avocado toast, avocado spread, avocado in salad, and much more. That’s why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados…</p>
-</section>
-<section id="data-overview" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="data-overview">Data Overview</h2>
+<p>As such, I want to predict the average price of a single avocado (<code>average_price</code>). Training and selecting a model that best predicts average price based on a number of variables will help me pin down the average price of a single avocado in the places I want to live in.</p>
+<p>The data I will be using to build my predictive model comes from Kaggle.</p>
 <p>This dataset contains historical data on avocado prices and sales volume in multiple US markets.</p>
 <p>This is the link to the Avocado Prices dataset on Kaggle: <strong><a href="https://www.kaggle.com/datasets/neuromusic/avocado-prices">https://www.kaggle.com/datasets/neuromusic/avocado-prices</a></strong> <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a></p>
 <div class="no-row-height column-margin column-container"><li id="fn1"><p><sup>1</sup> Kiggins, Justin. “Avocado Prices.” Kaggle, 2018, https://www.kaggle.com/datasets/neuromusic/avocado-prices.</p></li><li id="fn2"><p><sup>2</sup> Hass Avocado Board, https://hassavocadoboard.com/</p></li></div><p>This data was downloaded from the Hass Avocado Board website <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> in May of 2018 and compiled into a single CSV. There are 18,249 observations in this dataset and 14 variables. There is 1 date-time object, 10 numerical variables, 2 categorical variables and 1 id column. There is no missingness in this dataset.</p>
-<p><strong>I want to predict the prices avocados will sell at (ie. <code>average_price</code>).</strong> So this is a <strong>regression problem</strong>.</p>
-<p>These are the definitions for some of the variables:</p>
+<p>To reiterate, <strong>I want to predict the price a single avocado will sell at (ie. <code>average_price</code>).</strong> This is a <strong>regression problem</strong>.</p>
+<p>These are the definitions the Kaggle site gives for some of the variables in the avocado dataset:</p>
 <ul>
 <li><p><code>date</code> - The date of the observation</p></li>
 <li><p><code>average_price</code> - the average price of a single avocado</p></li>
@@ -3127,270 +3131,9 @@ Github Repo Link
 <li><p><code>x4770</code> - Total number of avocados with PLU 4770 sold</p></li>
 </ul>
 </section>
-<section id="methods" class="level2 page-columns page-full">
-<h2 class="anchored" data-anchor-id="methods">Methods</h2>
-<p>This is a regression problem, so the assessment metric I will be using is the RMSE. RMSE calculates the average difference between the model’s predicted prices and the actual prices, and it better accounts for outliers, which is important since a preliminary exploration of average price reveals that this variable is slightly skewed right.</p>
-<p>I will be using the following model types: null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest.</p>
-<ul>
-<li><p>The null model is the simplest possible baseline model. I am using it a benchmark/reference model to help me ultimately decide whether building increasingly complex models would be worth the effort and expense. There is nothing to tune for this model.</p></li>
-<li><p>The ordinary linear regression model is a simple parametric model that uses the traditional method of least squares to solve for model parameters. I am using it as simple model to compare other models against. There is nothing to tune for this model.</p></li>
-<li><p>The lasso model is a regularized regression, parametric model with a mixture of 1 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model.</p></li>
-<li><p>The ridge model a regularized regression, parametric model with a mixture of 0 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model.</p></li>
-<li><p>The boosted tree model is a non-parametric model where multiple sequential simple regression trees are combined into a stronger model, and each tree is trained on the residuals from the previous sequence of trees. All trees are then combined together using an additive model, whose weights are estimated via the gradient descent procedure. I am using it as a model to compare other models against. I tuned the mtry, min_n, and learn_rate for this model.</p></li>
-<li><p>The k nearest neighbors model is a non-parametric model that uses the K most similar data points from the training set to predict new samples. I am using it as a model to compare other models against. I tuned the neighbors for this model.</p></li>
-<li><p>The random forest model is a non-parametric model that creates a large number of decision trees, each independent of the others. The final prediction uses all predictions from the individual trees and combines them, making this model type resistant to outliers. I am using it as a model to compare other models against. I tuned the mtry and min_n for this model.</p></li>
-</ul>
-<p>Because this dataset is quite large, at 18,249 observations, I decided to use 70% of this dataset to train the model (12,772 observations) and 30% to test the model (5,477 observations).</p>
-<p>I also resampled my dataset, partitioning the dataset into 10 parts and repeating this 5 more times. Training the model like this across multiple subsets of data lets us measure the average performance across all these partitions. This lets us better quantify the variability of our data and get better estimates, while also preventing overfitting. So 1,277 observations will be in the assessment set and 11,494 observations will be in the training set.</p>
-<p>I used these models: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest.</p>
-<p>I will be using a kitchen sink recipe and a feature engineered recipe.</p>
-<p>For the kitchen sink recipes, my goal was to create a very simple, general recipe.</p>
-<ul>
-<li><p>I started by predicting the target variable with all other variables.</p></li>
-<li><p>I removed the id variable, date, and region. This is because the id variable will perfectly predict each observation which isn’t useful. I removed date because the useful information is already in the year variable, so it’s redundant to keep it in. I removed region because there would be 54 factored levels and that took too much computational time.</p></li>
-<li><p>I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.</p></li>
-<li><p>I filtered out variables with near zero variance.</p></li>
-<li><p>Then I centered and scaled all predictors.</p></li>
-</ul>
-<p>I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, and other variables in the dataset. See <code>1_exploration_fe</code> for more information.</p>
-<ul>
-<li><p>I removed the id variable, date, and region for the same reasons as the kitchen sink recipe.</p></li>
-<li><p>I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.</p></li>
-<li><p>This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the avocado type 4770 and extra large bags. This is due to two reasons. First, the Hass Avocado Board <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> describes avocado PLU 4770 as extra large avocados. That means there should be a relationship between it and extra large bags, potentially with some avocado PLU 4225 mixed up in there due to 4225 being large avocados. Second, the relationship between avocado type 4770 and extra large bags is, oddly enough, non linear. That means any interaction term created with them will not simply be a bunch of constants, which could help improve our modeling accuracy.</p></li>
-<li><p>I filtered out variables with near zero variance.</p></li>
-<li><p>Then I centered and scaled all predictors.</p></li>
-</ul>
-<div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup> https://loveonetoday.com/how-to/identify-hass-avocados/</p></li></div><p>A few additional notes on my feature engineered recipes:</p>
-<ul>
-<li><p>There is no missingness in my data, so I don’t need to impute.</p></li>
-<li><p>I did not log transform anything because several of my predictor values had zeros, so transforming will produce NaN values and I don’t want that. Also, the distribution of average price looked fine and didn’t warrant a log transformation.</p></li>
-<li><p>I was going to consider adding a natural spline basis function to my featured engineered recipes, but the relationships between the predictor variables and average price seem to be pretty linear, and I don’t see the need for it unless I run the risk of overfitting.</p></li>
-</ul>
-</section>
-<section id="model-building-selection" class="level2">
-<h2 class="anchored" data-anchor-id="model-building-selection">Model Building &amp; Selection</h2>
-</section>
-<section id="final-model-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="final-model-analysis">Final Model Analysis</h2>
-<p>The table of RMSEs and standard errors created below was made using kitchen recipes. It displays the RMSE and standard error for the model with the lowest RMSE for each model type.</p>
-<p>The baseline is the null model. I’ve also defined and fitted the OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest models.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: left;">Model Type</th>
-<th style="text-align: right;">RMSE</th>
-<th style="text-align: right;">Std Error</th>
-<th style="text-align: right;">Num Computations</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">rf</td>
-<td style="text-align: right;">0.1741481</td>
-<td style="text-align: right;">0.0008751</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">knn</td>
-<td style="text-align: right;">0.1997596</td>
-<td style="text-align: right;">0.0011066</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bt</td>
-<td style="text-align: right;">0.2134185</td>
-<td style="text-align: right;">0.0008817</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">lasso</td>
-<td style="text-align: right;">0.3003404</td>
-<td style="text-align: right;">0.0009083</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">lm</td>
-<td style="text-align: right;">0.3003657</td>
-<td style="text-align: right;">0.0009079</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ridge</td>
-<td style="text-align: right;">0.3014926</td>
-<td style="text-align: right;">0.0008964</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">null</td>
-<td style="text-align: right;">0.3988374</td>
-<td style="text-align: right;">0.0007374</td>
-<td style="text-align: right;">50</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>The best model is the random forest model because it has the lowest RMSE. It also has a low standard error. So the predictions created by the random forest model should be the closest to the true values.</p>
-<section id="eda" class="level3">
-<h3 class="anchored" data-anchor-id="eda">EDA</h3>
-<p>Next, I will do a preliminary EDA to continue on the progress made in Progress Memo 1. This will help decide what interactions to use in my second recipe.</p>
-<p>Below is a correlation plot.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 10%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 10%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;">average_price</th>
-<th style="text-align: right;">total_volume</th>
-<th style="text-align: right;">x4046</th>
-<th style="text-align: right;">x4225</th>
-<th style="text-align: right;">x4770</th>
-<th style="text-align: right;">total_bags</th>
-<th style="text-align: right;">small_bags</th>
-<th style="text-align: right;">large_bags</th>
-<th style="text-align: right;">x_large_bags</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">average_price</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">-0.1927524</td>
-<td style="text-align: right;">-0.2083170</td>
-<td style="text-align: right;">-0.1729278</td>
-<td style="text-align: right;">-0.1794460</td>
-<td style="text-align: right;">-0.1770879</td>
-<td style="text-align: right;">-0.1747298</td>
-<td style="text-align: right;">-0.1729400</td>
-<td style="text-align: right;">-0.1175916</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">total_volume</td>
-<td style="text-align: right;">-0.1927524</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9778632</td>
-<td style="text-align: right;">0.9741808</td>
-<td style="text-align: right;">0.8722023</td>
-<td style="text-align: right;">0.9630471</td>
-<td style="text-align: right;">0.9672382</td>
-<td style="text-align: right;">0.8806396</td>
-<td style="text-align: right;">0.7471574</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x4046</td>
-<td style="text-align: right;">-0.2083170</td>
-<td style="text-align: right;">0.9778632</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9261100</td>
-<td style="text-align: right;">0.8333891</td>
-<td style="text-align: right;">0.9200566</td>
-<td style="text-align: right;">0.9252799</td>
-<td style="text-align: right;">0.8386450</td>
-<td style="text-align: right;">0.6993773</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">x4225</td>
-<td style="text-align: right;">-0.1729278</td>
-<td style="text-align: right;">0.9741808</td>
-<td style="text-align: right;">0.9261100</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.8878550</td>
-<td style="text-align: right;">0.9057875</td>
-<td style="text-align: right;">0.9160312</td>
-<td style="text-align: right;">0.8100152</td>
-<td style="text-align: right;">0.6888087</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x4770</td>
-<td style="text-align: right;">-0.1794460</td>
-<td style="text-align: right;">0.8722023</td>
-<td style="text-align: right;">0.8333891</td>
-<td style="text-align: right;">0.8878550</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.7923143</td>
-<td style="text-align: right;">0.8027330</td>
-<td style="text-align: right;">0.6984710</td>
-<td style="text-align: right;">0.6798611</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">total_bags</td>
-<td style="text-align: right;">-0.1770879</td>
-<td style="text-align: right;">0.9630471</td>
-<td style="text-align: right;">0.9200566</td>
-<td style="text-align: right;">0.9057875</td>
-<td style="text-align: right;">0.7923143</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9943346</td>
-<td style="text-align: right;">0.9430091</td>
-<td style="text-align: right;">0.8042326</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">small_bags</td>
-<td style="text-align: right;">-0.1747298</td>
-<td style="text-align: right;">0.9672382</td>
-<td style="text-align: right;">0.9252799</td>
-<td style="text-align: right;">0.9160312</td>
-<td style="text-align: right;">0.8027330</td>
-<td style="text-align: right;">0.9943346</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9025889</td>
-<td style="text-align: right;">0.8068446</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">large_bags</td>
-<td style="text-align: right;">-0.1729400</td>
-<td style="text-align: right;">0.8806396</td>
-<td style="text-align: right;">0.8386450</td>
-<td style="text-align: right;">0.8100152</td>
-<td style="text-align: right;">0.6984710</td>
-<td style="text-align: right;">0.9430091</td>
-<td style="text-align: right;">0.9025889</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.7108584</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x_large_bags</td>
-<td style="text-align: right;">-0.1175916</td>
-<td style="text-align: right;">0.7471574</td>
-<td style="text-align: right;">0.6993773</td>
-<td style="text-align: right;">0.6888087</td>
-<td style="text-align: right;">0.6798611</td>
-<td style="text-align: right;">0.8042326</td>
-<td style="text-align: right;">0.8068446</td>
-<td style="text-align: right;">0.7108584</td>
-<td style="text-align: right;">1.0000000</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>It seems like for my second recipe, I could create interactions between <code>total_bags</code> and <code>small_bags</code>, <code>total_volume</code> and <code>x4046</code>, and <code>total_volume</code> and <code>x4225</code>. (As a reminder, 4046 and 4225 are PLU numbers — numbers used to properly identify avocados sold at retail.)</p>
-</section>
-</section>
-<section id="conclusion" class="level2">
-<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
-</section>
-<section id="references" class="level2">
-<h2 class="anchored" data-anchor-id="references">References</h2>
-</section>
-<section id="appendix-a-an-exploration-of-average-avocado-price" class="level2">
-<h2 class="anchored" data-anchor-id="appendix-a-an-exploration-of-average-avocado-price">Appendix A: An exploration of average avocado price</h2>
-<p>Our check for missingness reveals that there is none in this dataset.</p>
+<section id="data-overview" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="data-overview">Data Overview</h2>
+<p>Let’s start with a check for missingness:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -3400,7 +3143,8 @@ Github Repo Link
 </div>
 </div>
 </div>
-<p>A skim of this dataset also confirms this.</p>
+<p><strong>There is no missingness in this dataset.</strong></p>
+<p>A skim of this dataset also confirms this:</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -3707,7 +3451,7 @@ Github Repo Link
 </table>
 </div>
 </div>
-<p>Let’s explore the variable <code>average_price</code>.</p>
+<p><br> Next, let’s explore our target variable, <code>average_price</code>:</p>
 <div class="cell">
 <div class="cell-output-display">
 <div>
@@ -3717,7 +3461,7 @@ Github Repo Link
 </div>
 </div>
 </div>
-<p>The median <code>average_price</code> of an avocado in this dataset is $1.37. The IQR is about $0.56. This boxplot is slightly right skewed, but not to the extreme that it would warrant any logarithmic transformations. There are several outliers for <code>average_price</code>, with these outliers spanning the $2.50 to $3.25 per avocado range. The cheapest average price of an avocado is $0.44. The most expensive average price of an avocado is $3.25.</p>
+<p>The median <code>average_price</code> of an avocado in this dataset is $1.37. The IQR is about $0.56. This boxplot is slightly right skewed, but not to the extreme that it warrants any logarithmic transformations. There are several outliers for <code>average_price</code>, with these outliers spanning the $2.50 to $3.25 per avocado range. The cheapest average price of an avocado is $0.44. The most expensive average price of an avocado is $3.25.</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -3756,7 +3500,7 @@ Github Repo Link
 </table>
 </div>
 </div>
-<p>A correlation plot:</p>
+<p><br> Now, let’s create a correlation plot to look at the relationship between average price and the predictor variables, as well as the relationship between variables:</p>
 <div class="cell">
 <div class="cell-output-display">
 <table class="table table-sm table-striped small">
@@ -3899,6 +3643,286 @@ Github Repo Link
 </table>
 </div>
 </div>
+<p><br> To point out some things I’ll note when explaining my feature engineered recipe, but that are worth highlighting from this correlation plot:</p>
+<ul>
+<li><p>There is a strong correlation between the size of the avocado (x4046, x4225, x4770 denote the type of avocado, where each weight category is given a specific number) and the size of the bag (small bags, large bags, extra large bags). This is unsurprising, yet also interesting to consider because by definition, the weight categories overlap a bit <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, so that’s why the correlations aren’t perfect.</p></li>
+<li><p>It’s also interesting to note that what I had originally thought would be a great interaction — between average price and total volume (the total number of avocados sold) — had almost no correlation. But maybe average price will be best predicted by a combination of these variables, instead of any one variable alone.</p></li>
+</ul>
+<div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup> https://loveonetoday.com/how-to/identify-hass-avocados/</p></li></div></section>
+<section id="methods" class="level2 page-columns page-full">
+<h2 class="anchored" data-anchor-id="methods">Methods</h2>
+<section id="data-splitting-procedure" class="level3">
+<h3 class="anchored" data-anchor-id="data-splitting-procedure">Data Splitting Procedure</h3>
+<p>This is a regression problem, so the assessment metric I will be using is the RMSE. RMSE calculates the average difference between the model’s predicted prices and the actual prices, and it better accounts for outliers, which is important since a preliminary exploration of average price reveals that this variable is <em>slightly</em> skewed right.</p>
+<p>Because this dataset is quite large, at 18,249 observations, I decided to use 70% of this dataset to train the model (12,772 observations) and 30% to test the model (5,477 observations).</p>
+</section>
+<section id="resampling-technique" class="level3">
+<h3 class="anchored" data-anchor-id="resampling-technique">Resampling Technique</h3>
+<p>I also resampled my dataset, partitioning the dataset into 10 parts and repeating this 5 more times. Training the model like this across multiple subsets of data lets us measure the average performance across all these partitions. This lets us better quantify the variability of our data and get better estimates, while also preventing overfitting. So 1,277 observations will be in the assessment set and 11,494 observations will be in the training set.</p>
+</section>
+<section id="model-types" class="level3">
+<h3 class="anchored" data-anchor-id="model-types">Model Types</h3>
+<p>I used the following model types: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest.</p>
+<ul>
+<li><p>The null model is the simplest possible baseline model. I am using it a benchmark/reference model to help me ultimately decide whether building increasingly complex models would be worth the effort and expense. There is nothing to tune for this model.</p></li>
+<li><p>The ordinary linear regression model is a simple parametric model that uses the traditional method of least squares to solve for model parameters. I am using it as simple model to compare other models against. There is nothing to tune for this model.</p></li>
+<li><p>The lasso model is a regularized regression, parametric model with a mixture of 1 that adds a penalty term to standard regression. I will compare this model against other models to determine the best one. I tuned the penalty for this model.</p></li>
+<li><p>The ridge model a regularized regression, parametric model with a mixture of 0 that adds a penalty term to standard regression. I will compare this model against other models to determine the best one. I tuned the penalty for this model.</p></li>
+<li><p>The boosted tree model is a non-parametric model where multiple sequential simple regression trees are combined into a stronger model, and each tree is trained on the residuals from the previous sequence of trees. All trees are then combined together using an additive model, whose weights are estimated via the gradient descent procedure. I will compare this model against other models to determine the best one. I tuned the mtry, min_n, and learn_rate for this model.</p></li>
+<li><p>The k nearest neighbors model is a non-parametric model that uses the K most similar data points from the training set to predict new samples. I will compare this model against other models to determine the best one. I tuned the neighbors for this model.</p></li>
+<li><p>The random forest model is a non-parametric model that creates a large number of decision trees, each independent of the others. The final prediction uses all predictions from the individual trees and combines them, making this model type resistant to outliers. I will compare this model against other models to determine the best one. I tuned the mtry and min_n for this model.</p></li>
+</ul>
+</section>
+<section id="recipes" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="recipes">Recipes</h3>
+<p>I will be using a kitchen sink recipe and a feature engineered recipe.</p>
+<p>For the kitchen sink recipes, my goal was to create a very simple, general recipe.</p>
+<ul>
+<li><p>I started by predicting the target variable with all other variables.</p></li>
+<li><p>I removed the id variable, date, and region. This is because the id variable will perfectly predict each observation which isn’t useful. I removed date because the useful information is already in the year variable, so it’s redundant to keep it in. I removed region because there would be 54 factored levels and that took too much computational time.</p></li>
+<li><p>I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.</p></li>
+<li><p>I filtered out variables with near zero variance.</p></li>
+<li><p>Then I centered and scaled all predictors.</p></li>
+</ul>
+<p>I decided on my feature engineered recipes based on my exploratory data analysis of the target variable, average price, and other variables in the dataset. See <code>1_exploration_fe</code> for more information.</p>
+<ul>
+<li><p>I removed the id variable, date, and region for the same reasons as the kitchen sink recipe.</p></li>
+<li><p>I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.</p></li>
+<li><p>This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the avocado type 4770 and extra large bags. This is due to two reasons. First, the Hass Avocado Board <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> describes avocado PLU 4770 as extra large avocados. That means there should be a relationship between it and extra large bags, potentially with some avocado PLU 4225 mixed up in there due to 4225 being large avocados. Second, the relationship between avocado type 4770 and extra large bags is non linear. That means any interaction term created with them will <em>not</em> simply result in almost identical similar constants, so that could help improve our modeling accuracy.</p></li>
+<li><p>I filtered out variables with near zero variance.</p></li>
+<li><p>Then I centered and scaled all predictors.</p></li>
+</ul>
+<div class="no-row-height column-margin column-container"><li id="fn4"><p><sup>4</sup> https://loveonetoday.com/how-to/identify-hass-avocados/</p></li></div><p>A few additional notes on my feature engineered recipes:</p>
+<ul>
+<li><p>There is no missingness in my data, so I don’t need to impute.</p></li>
+<li><p>I did not log transform anything because several of my predictor values had zeros, so transforming will produce NaN values and I don’t want that. Also, the distribution of average price looked fine and didn’t warrant a log transformation.</p></li>
+<li><p>I was going to consider adding a natural spline basis function to my featured engineered recipes, but the relationships between the predictor variables and average price seem to be pretty linear, and I don’t see the need for it unless I run the risk of overfitting.</p></li>
+</ul>
+</section>
+</section>
+<section id="model-building-selection" class="level2">
+<h2 class="anchored" data-anchor-id="model-building-selection">Model Building &amp; Selection</h2>
+</section>
+<section id="final-model-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="final-model-analysis">Final Model Analysis</h2>
+<p>The table of RMSEs and standard errors created below was made using kitchen recipes. It displays the RMSE and standard error for the model with the lowest RMSE for each model type.</p>
+<p>The baseline is the null model. I’ve also defined and fitted the OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest models.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model Type</th>
+<th style="text-align: right;">RMSE</th>
+<th style="text-align: right;">Std Error</th>
+<th style="text-align: right;">Num Computations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rf</td>
+<td style="text-align: right;">0.1741481</td>
+<td style="text-align: right;">0.0008751</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">knn</td>
+<td style="text-align: right;">0.1997596</td>
+<td style="text-align: right;">0.0011066</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bt</td>
+<td style="text-align: right;">0.2134185</td>
+<td style="text-align: right;">0.0008817</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lasso</td>
+<td style="text-align: right;">0.3003404</td>
+<td style="text-align: right;">0.0009083</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lm</td>
+<td style="text-align: right;">0.3003657</td>
+<td style="text-align: right;">0.0009079</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ridge</td>
+<td style="text-align: right;">0.3014926</td>
+<td style="text-align: right;">0.0008964</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">null</td>
+<td style="text-align: right;">0.3988374</td>
+<td style="text-align: right;">0.0007374</td>
+<td style="text-align: right;">50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The best model is the random forest model because it has the lowest RMSE. It also has a low standard error. So the predictions created by the random forest model should be the closest to the true values.</p>
+<section id="eda" class="level3">
+<h3 class="anchored" data-anchor-id="eda">EDA</h3>
+<p>Next, I will do a preliminary EDA to continue on the progress made in Progress Memo 1. This will help decide what interactions to use in my second recipe.</p>
+<p>Below is a correlation plot.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 10%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">average_price</th>
+<th style="text-align: right;">total_volume</th>
+<th style="text-align: right;">x4046</th>
+<th style="text-align: right;">x4225</th>
+<th style="text-align: right;">x4770</th>
+<th style="text-align: right;">total_bags</th>
+<th style="text-align: right;">small_bags</th>
+<th style="text-align: right;">large_bags</th>
+<th style="text-align: right;">x_large_bags</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">average_price</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">-0.1927524</td>
+<td style="text-align: right;">-0.2083170</td>
+<td style="text-align: right;">-0.1729278</td>
+<td style="text-align: right;">-0.1794460</td>
+<td style="text-align: right;">-0.1770879</td>
+<td style="text-align: right;">-0.1747298</td>
+<td style="text-align: right;">-0.1729400</td>
+<td style="text-align: right;">-0.1175916</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_volume</td>
+<td style="text-align: right;">-0.1927524</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9778632</td>
+<td style="text-align: right;">0.9741808</td>
+<td style="text-align: right;">0.8722023</td>
+<td style="text-align: right;">0.9630471</td>
+<td style="text-align: right;">0.9672382</td>
+<td style="text-align: right;">0.8806396</td>
+<td style="text-align: right;">0.7471574</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">x4046</td>
+<td style="text-align: right;">-0.2083170</td>
+<td style="text-align: right;">0.9778632</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9261100</td>
+<td style="text-align: right;">0.8333891</td>
+<td style="text-align: right;">0.9200566</td>
+<td style="text-align: right;">0.9252799</td>
+<td style="text-align: right;">0.8386450</td>
+<td style="text-align: right;">0.6993773</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">x4225</td>
+<td style="text-align: right;">-0.1729278</td>
+<td style="text-align: right;">0.9741808</td>
+<td style="text-align: right;">0.9261100</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.8878550</td>
+<td style="text-align: right;">0.9057875</td>
+<td style="text-align: right;">0.9160312</td>
+<td style="text-align: right;">0.8100152</td>
+<td style="text-align: right;">0.6888087</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">x4770</td>
+<td style="text-align: right;">-0.1794460</td>
+<td style="text-align: right;">0.8722023</td>
+<td style="text-align: right;">0.8333891</td>
+<td style="text-align: right;">0.8878550</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.7923143</td>
+<td style="text-align: right;">0.8027330</td>
+<td style="text-align: right;">0.6984710</td>
+<td style="text-align: right;">0.6798611</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">total_bags</td>
+<td style="text-align: right;">-0.1770879</td>
+<td style="text-align: right;">0.9630471</td>
+<td style="text-align: right;">0.9200566</td>
+<td style="text-align: right;">0.9057875</td>
+<td style="text-align: right;">0.7923143</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9943346</td>
+<td style="text-align: right;">0.9430091</td>
+<td style="text-align: right;">0.8042326</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">small_bags</td>
+<td style="text-align: right;">-0.1747298</td>
+<td style="text-align: right;">0.9672382</td>
+<td style="text-align: right;">0.9252799</td>
+<td style="text-align: right;">0.9160312</td>
+<td style="text-align: right;">0.8027330</td>
+<td style="text-align: right;">0.9943346</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.9025889</td>
+<td style="text-align: right;">0.8068446</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">large_bags</td>
+<td style="text-align: right;">-0.1729400</td>
+<td style="text-align: right;">0.8806396</td>
+<td style="text-align: right;">0.8386450</td>
+<td style="text-align: right;">0.8100152</td>
+<td style="text-align: right;">0.6984710</td>
+<td style="text-align: right;">0.9430091</td>
+<td style="text-align: right;">0.9025889</td>
+<td style="text-align: right;">1.0000000</td>
+<td style="text-align: right;">0.7108584</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">x_large_bags</td>
+<td style="text-align: right;">-0.1175916</td>
+<td style="text-align: right;">0.7471574</td>
+<td style="text-align: right;">0.6993773</td>
+<td style="text-align: right;">0.6888087</td>
+<td style="text-align: right;">0.6798611</td>
+<td style="text-align: right;">0.8042326</td>
+<td style="text-align: right;">0.8068446</td>
+<td style="text-align: right;">0.7108584</td>
+<td style="text-align: right;">1.0000000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>It seems like for my second recipe, I could create interactions between <code>total_bags</code> and <code>small_bags</code>, <code>total_volume</code> and <code>x4046</code>, and <code>total_volume</code> and <code>x4225</code>. (As a reminder, 4046 and 4225 are PLU numbers — numbers used to properly identify avocados sold at retail.)</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+</section>
+<section id="references" class="level2">
+<h2 class="anchored" data-anchor-id="references">References</h2>
+</section>
+<section id="appendix-a-an-exploration-of-average-avocado-price" class="level2">
+<h2 class="anchored" data-anchor-id="appendix-a-an-exploration-of-average-avocado-price">Appendix A: An exploration of average avocado price</h2>
 </section>
 
 

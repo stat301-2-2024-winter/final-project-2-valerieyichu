@@ -74,14 +74,12 @@ avocado <- read_csv(here("data/avocado.csv")) |>
 ```
 
 ## Introduction
-Introduce your problem(s)/objective(s). Discuss why you are trying to predict this variable (motivation). Why is this useful? Describe the data source(s) you will use to build a predictive model. If you are obtaining information from websites you should site those in your References.
-
-
 
 I'm Californian, and I love avocados. There's avocado toast, avocado spread, avocado in salad, and much more. That's why I was interested in a dataset about avocados. Hopefully, this final project will help me pinpoint and eventually move to a city with the cheapest avocados...
 
+As such, I want to predict the average price of a single avocado (`average_price`). Training and selecting a model that best predicts average price based on a number of variables will help me pin down the average price of a single avocado in the places I want to live in. 
 
-## Data Overview
+The data I will be using to build my predictive model comes from Kaggle. 
 
 This dataset contains historical data on avocado prices and sales volume in multiple US markets.
 
@@ -90,9 +88,9 @@ This is the link to the Avocado Prices dataset on Kaggle:
 
 This data was downloaded from the Hass Avocado Board website ^[Hass Avocado Board, https://hassavocadoboard.com/] in May of 2018 and compiled into a single CSV. There are 18,249 observations in this dataset and 14 variables. There is 1 date-time object, 10 numerical variables, 2 categorical variables and 1 id column. There is no missingness in this dataset. 
 
-**I want to predict the prices avocados will sell at (ie. `average_price`).** So this is a **regression problem**. 
+To reiterate, **I want to predict the price a single avocado will sell at (ie. `average_price`).** This is a **regression problem**. 
 
-These are the definitions for some of the variables: 
+These are the definitions the Kaggle site gives for some of the variables in the avocado dataset: 
 
 - `date` - The date of the observation
 
@@ -113,35 +111,112 @@ These are the definitions for some of the variables:
 - `x4770` - Total number of avocados with PLU 4770 sold
 
 
+## Data Overview
+
+Let's start with a check for missingness: 
+
+```{r}
+#| echo: false
+
+naniar::gg_miss_var(avocado)
+
+```
+
+**There is no missingness in this dataset.**
+
+A skim of this dataset also confirms this:
+```{r}
+#| echo: false
+
+skimr::skim(avocado)
+
+```
+
+<br/> Next, let's explore our target variable, `average_price`: 
+
+```{r}
+#| echo: false
+
+avocado |> 
+  ggplot(aes(x = average_price)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = seq(0, 4, 0.5)) +
+  theme_minimal()
+
+```
+
+
+The median `average_price` of an avocado in this dataset is $1.37. The IQR is about $0.56. This boxplot is slightly right skewed, but not to the extreme that it warrants any logarithmic transformations. There are several outliers for `average_price`, with these outliers spanning the $2.50 to $3.25 per avocado range. The cheapest average price of an avocado is $0.44. The most expensive average price of an avocado is $3.25.
+
+```{r}
+#| echo: false
+
+avocado |> 
+  select(average_price) |> 
+  summary(mean = mean(average_price, na.rm = TRUE),
+          median = median(average_price, na.rm = TRUE)) |> 
+  knitr::kable()
+
+```
+
+
+<br/> Now, let's create a correlation plot to look at the relationship between average price and the predictor variables, as well as the relationship between variables:
+
+```{r}
+#| echo: false
+
+avocado |> 
+  select(average_price, total_volume, x4046, x4225, x4770, 
+         total_bags, small_bags, large_bags,  x_large_bags) |> 
+  cor() |> 
+  knitr::kable()
+
+```
+
+
+<br/> To point out some things I'll note when explaining my feature engineered recipe, but that are worth highlighting from this correlation plot:
+
+- There is a strong correlation between the size of the avocado (x4046, x4225, x4770 denote the type of avocado, where each weight category is given a specific number) and the size of the bag (small bags, large bags, extra large bags). This is unsurprising, yet also interesting to consider because by definition, the weight categories overlap a bit ^[https://loveonetoday.com/how-to/identify-hass-avocados/], so that's why the correlations aren't perfect. 
+
+- It's also interesting to note that what I had originally thought would be a great interaction — between average price and total volume (the total number of avocados sold) — had almost no correlation. But maybe average price will be best predicted by a combination of these variables, instead of any one variable alone. 
+
+
 ## Methods
 
-This is a regression problem, so the assessment metric I will be using is the RMSE. RMSE calculates the average difference between the model's predicted prices and the actual prices, and it better accounts for outliers, which is important since a preliminary exploration of average price reveals that this variable is slightly skewed right. 
+### Data Splitting Procedure
+This is a regression problem, so the assessment metric I will be using is the RMSE. RMSE calculates the average difference between the model's predicted prices and the actual prices, and it better accounts for outliers, which is important since a preliminary exploration of average price reveals that this variable is *slightly* skewed right. 
+
+Because this dataset is quite large, at 18,249 observations, I decided to use 70% of this dataset to train the model (12,772 observations) and 30% to test the model (5,477 observations). 
 
 
-I will be using the following model types: null, OLS, lasso, ridge, boosted tree, k nearest neighbors, and random forest.
+### Resampling Technique
+
+I also resampled my dataset, partitioning the dataset into 10 parts and repeating this 5 more times. Training the model like this across multiple subsets of data lets us measure the average performance across all these partitions. This lets us better quantify the variability of our data and get better estimates, while also preventing overfitting. So 1,277 observations will be in the assessment set and 11,494 observations will be in the training set.  
+
+
+### Model Types
+
+I used the following model types: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest. 
 
 - The null model is the simplest possible baseline model. I am using it a benchmark/reference model to help me ultimately decide whether building increasingly complex models would be worth the effort and expense. There is nothing to tune for this model. 
 
 - The ordinary linear regression model is a simple parametric model that uses the traditional method of least squares to solve for model parameters. I am using it as simple model to compare other models against. There is nothing to tune for this model. 
 
-- The lasso model is a regularized regression, parametric model with a mixture of 1 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model. 
+- The lasso model is a regularized regression, parametric model with a mixture of 1 that adds a penalty term to standard regression. I will compare this model against other models to determine the best one. I tuned the penalty for this model.
 
-- The ridge model a regularized regression, parametric model with a mixture of 0 that adds a penalty term to standard regression. I am using it as a model to compare other models against. I tuned the penalty for this model. 
+- The ridge model a regularized regression, parametric model with a mixture of 0 that adds a penalty term to standard regression. I will compare this model against other models to determine the best one. I tuned the penalty for this model.
 
-- The boosted tree model is a non-parametric model where multiple sequential simple regression trees are combined into a stronger model, and each tree is trained on the residuals from the previous sequence of trees. All trees are then combined together using an additive model, whose weights are estimated via the gradient descent procedure. I am using it as a model to compare other models against. I tuned the mtry, min_n, and learn_rate for this model. 
+- The boosted tree model is a non-parametric model where multiple sequential simple regression trees are combined into a stronger model, and each tree is trained on the residuals from the previous sequence of trees. All trees are then combined together using an additive model, whose weights are estimated via the gradient descent procedure. I will compare this model against other models to determine the best one. I tuned the mtry, min_n, and learn_rate for this model. 
 
-- The k nearest neighbors model is a non-parametric model that uses the K most similar data points from the training set to predict new samples. I am using it as a model to compare other models against. I tuned the neighbors for this model. 
+- The k nearest neighbors model is a non-parametric model that uses the K most similar data points from the training set to predict new samples. I will compare this model against other models to determine the best one. I tuned the neighbors for this model. 
 
-- The random forest model is a non-parametric model that creates a large number of decision trees, each independent of the others. The final prediction uses all predictions from the individual trees and combines them, making this model type resistant to outliers. I am using it as a model to compare other models against. I tuned the mtry and min_n for this model. 
+- The random forest model is a non-parametric model that creates a large number of decision trees, each independent of the others. The final prediction uses all predictions from the individual trees and combines them, making this model type resistant to outliers. I will compare this model against other models to determine the best one. I tuned the mtry and min_n for this model. 
 
 
-Because this dataset is quite large, at 18,249 observations, I decided to use 70% of this dataset to train the model (12,772 observations) and 30% to test the model (5,477 observations). 
-
-I also resampled my dataset, partitioning the dataset into 10 parts and repeating this 5 more times. Training the model like this across multiple subsets of data lets us measure the average performance across all these partitions. This lets us better quantify the variability of our data and get better estimates, while also preventing overfitting. So 1,277 observations will be in the assessment set and 11,494 observations will be in the training set.  
-
-I used these models: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest. 
+### Recipes
 
 I will be using a kitchen sink recipe and a feature engineered recipe. 
+
 
 For the kitchen sink recipes, my goal was to create a very simple, general recipe. 
 
@@ -162,7 +237,7 @@ I decided on my feature engineered recipes based on my exploratory data analysis
 
 - I converted type and region (the factor variables) into numeric binary model terms corresponding to the levels of the original data.
 
-- This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the avocado type 4770 and extra large bags. This is due to two reasons. First, the Hass Avocado Board ^[https://loveonetoday.com/how-to/identify-hass-avocados/] describes avocado PLU 4770 as extra large avocados. That means there should be a relationship between it and extra large bags, potentially with some avocado PLU 4225 mixed up in there due to 4225 being large avocados. Second, the relationship between avocado type 4770 and extra large bags is, oddly enough, non linear. That means any interaction term created with them will not simply be a bunch of constants, which could help improve our modeling accuracy. 
+- This time, I added interaction terms. There is an interaction term between the type of avocado and the total number of avocados sold, because especially with the rise of an organic-conscious craze in recent years, I think the interaction between the type of avocado and the total number of avocados sold will have an effect on average price. There is also an interaction term between the avocado type 4770 and extra large bags. This is due to two reasons. First, the Hass Avocado Board ^[https://loveonetoday.com/how-to/identify-hass-avocados/] describes avocado PLU 4770 as extra large avocados. That means there should be a relationship between it and extra large bags, potentially with some avocado PLU 4225 mixed up in there due to 4225 being large avocados. Second, the relationship between avocado type 4770 and extra large bags is non linear. That means any interaction term created with them will *not* simply result in almost identical similar constants, so that could help improve our modeling accuracy. 
 
 - I filtered out variables with near zero variance. 
 
@@ -220,64 +295,4 @@ It seems like for my second recipe, I could create interactions between `total_b
 
 
 ## Appendix A: An exploration of average avocado price 
-
-Our check for missingness reveals that there is none in this dataset. 
-
-```{r}
-#| echo: false
-
-naniar::gg_miss_var(avocado)
-
-```
-
-A skim of this dataset also confirms this. 
-```{r}
-#| echo: false
-
-skimr::skim(avocado)
-
-```
-
-Let's explore the variable `average_price`. 
-
-```{r}
-#| echo: false
-
-avocado |> 
-  ggplot(aes(x = average_price)) +
-  geom_boxplot() +
-  scale_x_continuous(breaks = seq(0, 4, 0.5)) +
-  theme_minimal()
-
-```
-
-
-The median `average_price` of an avocado in this dataset is $1.37. The IQR is about $0.56. This boxplot is slightly right skewed, but not to the extreme that it would warrant any logarithmic transformations. There are several outliers for `average_price`, with these outliers spanning the $2.50 to $3.25 per avocado range. The cheapest average price of an avocado is $0.44. The most expensive average price of an avocado is $3.25.
-
-```{r}
-#| echo: false
-
-avocado |> 
-  select(average_price) |> 
-  summary(mean = mean(average_price, na.rm = TRUE),
-          median = median(average_price, na.rm = TRUE)) |> 
-  knitr::kable()
-
-```
-
-A correlation plot:
-```{r}
-#| echo: false
-
-avocado |> 
-  select(average_price, total_volume, x4046, x4225, x4770, 
-         total_bags, small_bags, large_bags,  x_large_bags) |> 
-  cor() |> 
-  knitr::kable()
-
-```
-
-
-
-
 
