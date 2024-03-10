@@ -31,8 +31,67 @@ registerDoMC(cores = parallel::detectCores(logical = TRUE))
 # handle common conflicts
 tidymodels_prefer()
 
-# More complicated table; display RMSE, RSQ
 
+
+
+## Visualize Results ----
+
+autoplot(tuned_lasso, metric = "rmse") +
+  labs(title = "Lasso") +
+  theme_minimal()
+# A penalty of 1e^-07 leads to the lowest RMSE.  
+
+
+autoplot(tuned_ridge, metric = "rmse") +
+  labs(title = "Ridge") +
+  theme_minimal()
+# A penalty of 1e^-07 leads to the lowest RMSE. 
+
+
+autoplot(tuned_bt, metric = "rmse") +
+  labs(title = "Boosted Tree") +
+  theme_minimal()
+# A learn rate of 0.630957 leads to the lowest RMSE. 
+# A mtry ("# Randomly Selected Predictors") of 14 leads to the lowest RMSE. 
+# A min_n ("Minimal Node Size") of 14 leads to the lowest RMSE. 
+
+
+autoplot(tuned_knn, metric = "rmse") +
+  labs(title = "K Nearest Neighbors") +
+  theme_minimal()
+# A neighbors of 8 leads to the lowest RMSE. 
+
+
+autoplot(tuned_rf, metric = "rmse") +
+  labs(title = "Random Forest") +
+  theme_minimal()
+# A mtry of 7 leads to the lowest RMSE. 
+# A min_n of 2 leads to the lowest RMSE. 
+
+
+
+
+## Select Best Hyperparameters ----
+# best hyperparameters for each model type
+
+tuned_lasso |> select_best(metric = "rmse")
+# Best hyperparameter: Penalty = 0.0000000001
+
+tuned_ridge |> select_best(metric = "rmse")
+# Best hyperparameter: Penalty = 0.0000000001
+
+tuned_bt |> select_best(metric = "rmse")
+# Best hyperparameters: mtry = 14. min_n = 14. learn_rate = 0.631
+
+tuned_knn |> select_best(metric = "rmse")
+# Best hyperparameter: neighbors = 8
+
+tuned_rf |> select_best(metric = "rmse")
+# Best hyperparameter: mtry = 7. min_n = 2
+
+
+
+## Table ----
 null_results <- collect_metrics(fit_null) |> 
   mutate(model = "null")
 
@@ -54,6 +113,8 @@ bt_results <- collect_metrics(tuned_bt) |>
 knn_results <- collect_metrics(tuned_knn) |> 
   mutate(model = "knn") 
 
+
+# The simple table below shows all the rmses and rsqs for *every* model, so there are a lot of them.
 simple_tbl_result <- null_results |> 
   bind_rows(lm_results) |> 
   bind_rows(lasso_results) |> 

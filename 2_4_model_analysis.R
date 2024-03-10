@@ -31,8 +31,6 @@ registerDoMC(cores = parallel::detectCores(logical = TRUE))
 # handle common conflicts
 tidymodels_prefer()
 
-# notes - ex. "a min_n size of 30 typically performed better than a graph of 2." 
-# number randomly selected predictors = mtry. 
 
 
 ## Visualize Results ----
@@ -52,7 +50,7 @@ autoplot(tuned_ridge_2, metric = "rmse") +
 autoplot(tuned_bt_2, metric = "rmse") +
   labs(title = "Boosted Tree") +
   theme_minimal()
-# A learn rate of 0.6309 leads to the lowest RMSE. 
+# A learn rate of 0.630957 leads to the lowest RMSE. 
 # A mtry ("# Randomly Selected Predictors") of 19 leads to the lowest RMSE. 
 # A min_n ("Minimal Node Size") of 17 leads to the lowest RMSE. 
 
