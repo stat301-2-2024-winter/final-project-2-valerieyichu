@@ -31,7 +31,68 @@ registerDoMC(cores = parallel::detectCores(logical = TRUE))
 # handle common conflicts
 tidymodels_prefer()
 
-# More complicated table; display RMSE, RSQ
+# notes - ex. "a min_n size of 30 typically performed better than a graph of 2." 
+# number randomly selected predictors = mtry. 
+
+
+## Visualize Results ----
+
+autoplot(tuned_lasso_2, metric = "rmse") +
+  labs(title = "Lasso") +
+  theme_minimal()
+# A penalty of 1e^-08 leads to the lowest RMSE.  
+
+
+autoplot(tuned_ridge_2, metric = "rmse") +
+  labs(title = "Ridge") +
+  theme_minimal()
+# A penalty of 1e^-08 leads to the lowest RMSE. 
+
+
+autoplot(tuned_bt_2, metric = "rmse") +
+  labs(title = "Boosted Tree") +
+  theme_minimal()
+# A learn rate of 0.6309 leads to the lowest RMSE. 
+# A mtry ("# Randomly Selected Predictors") of 19 leads to the lowest RMSE. 
+# A min_n ("Minimal Node Size") of 17 leads to the lowest RMSE. 
+
+
+autoplot(tuned_knn_2, metric = "rmse") +
+  labs(title = "K Nearest Neighbors") +
+  theme_minimal()
+# A neighbors of 15 leads to the lowest RMSE. 
+
+
+autoplot(tuned_rf_2, metric = "rmse") +
+  labs(title = "Random Forest") +
+  theme_minimal()
+# A mtry of 9 leads to the lowest RMSE. 
+# A min_n of 2 leads to the lowest RMSE. 
+
+
+
+
+## Select Best Hyperparameters ----
+# best hyperparameters for each model type
+
+tuned_lasso_2 |> select_best(metric = "rmse")
+# Best hyperparameter: Penalty = 0.0000000001
+
+tuned_ridge_2 |> select_best(metric = "rmse")
+# Best hyperparameter: Penalty = 0.0000000001
+
+tuned_bt_2 |> select_best(metric = "rmse")
+# Best hyperparameters: mtry = 17. min_n = 9. learn_rate = 0.631
+
+tuned_knn_2 |> select_best(metric = "rmse")
+# Best hyperparameter: neighbors = 15
+
+tuned_rf_2 |> select_best(metric = "rmse")
+# Best hyperparameter: mtry = 9. min_n = 2
+
+
+
+## Table ----
 
 null_results_2 <- collect_metrics(fit_null_2) |> 
   mutate(model = "null")
@@ -54,6 +115,7 @@ bt_results_2 <- collect_metrics(tuned_bt_2) |>
 knn_results_2 <- collect_metrics(tuned_knn_2) |> 
   mutate(model = "knn") 
 
+# The simple table below shows all the rmses and rsqs for *every* model, so there are a lot of them.
 simple_tbl_result_2 <- null_results_2 |> 
   bind_rows(lm_results_2) |> 
   bind_rows(lasso_results_2) |> 
