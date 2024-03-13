@@ -3057,7 +3057,6 @@ vertical-align: -.125em;
   </ul></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
-  <li><a href="#appendix-a-an-exploration-of-average-avocado-price" id="toc-appendix-a-an-exploration-of-average-avocado-price" class="nav-link" data-scroll-target="#appendix-a-an-exploration-of-average-avocado-price">Appendix A: An exploration of average avocado price</a></li>
   </ul>
 </nav>
 </div>
@@ -3658,7 +3657,8 @@ Github Repo Link
 <li><p>There is a strong correlation between the size of the avocado (x4046, x4225, x4770 denote the type of avocado, where each weight category is given a specific number) and the size of the bag (small bags, large bags, extra large bags). This is unsurprising, yet also interesting to consider because by definition, the weight categories overlap a bit <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, so that’s why the correlations aren’t perfect.</p></li>
 <li><p>It’s also interesting to note that what I had originally thought would be a great interaction — between average price and total volume (the total number of avocados sold) — had almost no correlation. But maybe average price will be best predicted by a combination of these variables, instead of any one variable alone.</p></li>
 </ul>
-<div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup> https://loveonetoday.com/how-to/identify-hass-avocados/</p></li></div></section>
+<div class="no-row-height column-margin column-container"><li id="fn3"><p><sup>3</sup> https://loveonetoday.com/how-to/identify-hass-avocados/</p></li></div><p>The last thing I want to note for this data overview section is that further exploration (ex. such as exploring relationships and transformations) can be found in <code>1_exploration_fe</code>. This additional exploratory data analysis informed how I built my feature engineered recipes, and the comments I put in the R file explain my thought process in additional detail beyond what I have here.</p>
+</section>
 <section id="methods" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="methods">Methods</h2>
 <section id="data-splitting-procedure" class="level3">
@@ -3712,6 +3712,124 @@ Github Repo Link
 </section>
 <section id="model-building-selection" class="level2">
 <h2 class="anchored" data-anchor-id="model-building-selection">Model Building &amp; Selection</h2>
+<p>To reiterate, I am using RMSE as my assessment metric, the metric that will be used to compare models and determine which will be the final/winning model.</p>
+<p><a href="#tbl-models" class="quarto-xref">Table 1</a> shows the model results:</p>
+<div class="cell">
+<div id="tbl-models" class="cell anchored">
+<figure class="quarto-float quarto-float-tbl figure">
+<figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table 1: The RMSE and Standard Errors of All Models
+</figcaption>
+<div aria-describedby="tbl-models-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Model Type</th>
+<th style="text-align: right;">RMSE</th>
+<th style="text-align: right;">Std Error</th>
+<th style="text-align: right;">Num Computations</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rf</td>
+<td style="text-align: right;">0.1741050</td>
+<td style="text-align: right;">0.0008874</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">knn</td>
+<td style="text-align: right;">0.1997596</td>
+<td style="text-align: right;">0.0011066</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bt</td>
+<td style="text-align: right;">0.2123226</td>
+<td style="text-align: right;">0.0008106</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lasso</td>
+<td style="text-align: right;">0.3003404</td>
+<td style="text-align: right;">0.0009083</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lm</td>
+<td style="text-align: right;">0.3003657</td>
+<td style="text-align: right;">0.0009079</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">ridge</td>
+<td style="text-align: right;">0.3014926</td>
+<td style="text-align: right;">0.0008964</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">null</td>
+<td style="text-align: right;">0.3988374</td>
+<td style="text-align: right;">0.0007374</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rf_2</td>
+<td style="text-align: right;">0.1749338</td>
+<td style="text-align: right;">0.0008947</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">bt_2</td>
+<td style="text-align: right;">0.2131956</td>
+<td style="text-align: right;">0.0008083</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">knn_2</td>
+<td style="text-align: right;">0.2373078</td>
+<td style="text-align: right;">0.0009863</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lasso_2</td>
+<td style="text-align: right;">0.2993330</td>
+<td style="text-align: right;">0.0009000</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lm_2</td>
+<td style="text-align: right;">0.2993895</td>
+<td style="text-align: right;">0.0008983</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ridge_2</td>
+<td style="text-align: right;">0.3006146</td>
+<td style="text-align: right;">0.0008907</td>
+<td style="text-align: right;">50</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">null_2</td>
+<td style="text-align: right;">0.3988374</td>
+<td style="text-align: right;">0.0007374</td>
+<td style="text-align: right;">50</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p><a href="#tbl-models" class="quarto-xref">Table 1</a> indicates that building more complex models only somewhat appears to be worthwhile.</p>
+<ul>
+<li><p>The feature engineered non-parametric models (random forest, boosted tree, k nearest neighbors) performed worse than than their kitchen sink counterparts.</p></li>
+<li><p>However, the feature engineered parametric models (ordinary linear regression, lasso, and ridge) performed <em>better</em> than their kitchen sink counterparts — the feature engineered parametric models had lower RMSEs and lower standard errors, their their predictions were closer to the true values.</p></li>
+<li><p>And of course, the null models built with both the kitchen sink and feature engineered recipes produced the exact same RMSE and standard error as expected, because the recipes do not affect the null model; that’s why it’s a good baseline model.</p></li>
+</ul>
+<p>Still, the random forest model built with the kitchen sink had the lowest RMSE and lowest standard error of all the models, so it is the best model. It’s predictions wil be closest to the true values.</p>
 </section>
 <section id="final-model-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="final-model-analysis">Final Model Analysis</h2>
@@ -3930,9 +4048,10 @@ Github Repo Link
 </section>
 <section id="references" class="level2">
 <h2 class="anchored" data-anchor-id="references">References</h2>
-</section>
-<section id="appendix-a-an-exploration-of-average-avocado-price" class="level2">
-<h2 class="anchored" data-anchor-id="appendix-a-an-exploration-of-average-avocado-price">Appendix A: An exploration of average avocado price</h2>
+<ol type="1">
+<li><p>Kiggins, Justin. “Avocado Prices.” Kaggle, 2018, <a href="https://www.kaggle.com/datasets/neuromusic/avocado-prices">https://www.kaggle.com/datasets/neuromusic/avocado-prices</a>.</p></li>
+<li><p>Hass Avocado Board, <a href="https://hassavocadoboard.com/">https://hassavocadoboard.com/</a></p></li>
+</ol>
 </section>
 
 

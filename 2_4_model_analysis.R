@@ -129,13 +129,13 @@ save(simple_tbl_result_2, file = "results/simple_tbl_result_2.rda")
 
 # model results
 model_results_2 <- as_workflow_set(
-  null = fit_null_2,
-  lm = fit_lm_2,
-  lasso = tuned_lasso_2,
-  ridge = tuned_ridge_2,
-  bt = tuned_bt_2,
-  rf = tuned_rf_2,
-  knn = tuned_knn_2
+  null_2 = fit_null_2,
+  lm_2 = fit_lm_2,
+  lasso_2 = tuned_lasso_2,
+  ridge_2 = tuned_ridge_2,
+  bt_2 = tuned_bt_2,
+  rf_2 = tuned_rf_2,
+  knn_2 = tuned_knn_2
 )
 
 # show the rmse and standard error for the model with the lowest rmse for each model type

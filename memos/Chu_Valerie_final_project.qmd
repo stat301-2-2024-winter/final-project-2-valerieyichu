@@ -194,6 +194,10 @@ avocado |>
 - It's also interesting to note that what I had originally thought would be a great interaction — between average price and total volume (the total number of avocados sold) — had almost no correlation. But maybe average price will be best predicted by a combination of these variables, instead of any one variable alone. 
 
 
+The last thing I want to note for this data overview section is that further exploration (ex. such as exploring relationships and transformations) can be found in `1_exploration_fe`. This additional exploratory data analysis informed how I built my feature engineered recipes, and the comments I put in the R file explain my thought process in additional detail beyond what I have here.
+
+
+
 ## Methods
 
 ### Data Splitting Procedure
@@ -268,6 +272,33 @@ A few additional notes on my feature engineered recipes:
 
 ## Model Building & Selection
 
+To reiterate, I am using RMSE as my assessment metric, the metric that will be used to compare models and determine which will be the final/winning model.
+
+### Final/Winning Model
+
+@tbl-models shows the model results: 
+
+```{r, echo = FALSE}
+#| label: tbl-models
+#| tbl-cap: "The RMSE and Standard Errors of All Models"
+
+tbl_result_large <- bind_rows(tbl_result, tbl_result_2)
+
+tbl_result_large |> 
+  knitr::kable()
+
+```
+
+@tbl-models indicates that building more complex models only somewhat appears to be worthwhile. 
+
+- The feature engineered non-parametric models (random forest, boosted tree, k nearest neighbors) performed worse than than their kitchen sink counterparts. 
+
+- However, the feature engineered parametric models (ordinary linear regression, lasso, and ridge) performed *better* than their kitchen sink counterparts — the feature engineered parametric models had lower RMSEs and lower standard errors, their their predictions were closer to the true values. 
+
+- And of course, the null models built with both the kitchen sink and feature engineered recipes produced the exact same RMSE and standard error as expected, because the recipes do not affect the null model; that's why it's a good baseline model. 
+
+Still, the random forest model built with the kitchen sink had the lowest RMSE and lowest standard error of all the models, so it is the best model. It's predictions will be closest to the true values.
+
 
 
 
@@ -306,6 +337,7 @@ It seems like for my second recipe, I could create interactions between `total_b
 
 ## References
 
+1. Kiggins, Justin. “Avocado Prices.” Kaggle, 2018, [https://www.kaggle.com/datasets/neuromusic/avocado-prices](https://www.kaggle.com/datasets/neuromusic/avocado-prices).
 
-## Appendix A: An exploration of average avocado price 
+2. Hass Avocado Board, [https://hassavocadoboard.com/](https://hassavocadoboard.com/)
 
