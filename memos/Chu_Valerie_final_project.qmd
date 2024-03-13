@@ -297,8 +297,98 @@ tbl_result_large |>
 
 - And of course, the null models built with both the kitchen sink and feature engineered recipes produced the exact same RMSE and standard error as expected, because the recipes do not affect the null model; that's why it's a good baseline model. 
 
-Still, the random forest model built with the kitchen sink had the lowest RMSE and lowest standard error of all the models, so it is the best model. It's predictions will be closest to the true values.
+Still, the random forest model built with the kitchen sink had the lowest RMSE and lowest standard error of all the models, so it is the best model. Its predictions will be closest to the true values.
 
+### Tuning Parameters
+
+Below are a series of autoplots. They show what the best hyperparameter for each model type is. 
+
+The left column shows the autoplots from the models produced using the kitchen sink recipes. The right column shows the autoplots from the models produced using the feature engineered recipes. 
+
+```{r, echo = FALSE}
+#| label: autoplots
+#| fig-show: "hold"
+#| out-width: "100%"
+#| layout-ncol: 2
+
+autoplot_lasso <- autoplot(tuned_lasso, metric = "rmse") +
+  labs(title = "Lasso") +
+  theme_minimal()
+# A penalty of 1e^-07 leads to the lowest RMSE.  
+
+
+autoplot_ridge <- autoplot(tuned_ridge, metric = "rmse") +
+  labs(title = "Ridge") +
+  theme_minimal()
+# A penalty of 1e^-07 leads to the lowest RMSE. 
+
+
+autoplot_bt <- autoplot(tuned_bt, metric = "rmse") +
+  labs(title = "Boosted Tree") +
+  theme_minimal()
+# A learn rate of 0.630957 leads to the lowest RMSE. 
+# A mtry ("# Randomly Selected Predictors") of 14 leads to the lowest RMSE. 
+# A min_n ("Minimal Node Size") of 14 leads to the lowest RMSE. 
+
+
+autoplot_knn <- autoplot(tuned_knn, metric = "rmse") +
+  labs(title = "K Nearest Neighbors") +
+  theme_minimal()
+# A neighbors of 8 leads to the lowest RMSE. 
+
+
+autoplot_rf <- autoplot(tuned_rf, metric = "rmse") +
+  labs(title = "Random Forest") +
+  theme_minimal()
+# A mtry of 7 leads to the lowest RMSE. 
+# A min_n of 2 leads to the lowest RMSE.
+
+
+
+autoplot_lasso_2 <- autoplot(tuned_lasso_2, metric = "rmse") +
+  labs(title = "Lasso") +
+  theme_minimal()
+# A penalty of 1e^-08 leads to the lowest RMSE.  
+
+
+autoplot_ridge_2 <- autoplot(tuned_ridge_2, metric = "rmse") +
+  labs(title = "Ridge") +
+  theme_minimal()
+# A penalty of 1e^-08 leads to the lowest RMSE. 
+
+
+autoplot_bt_2 <- autoplot(tuned_bt_2, metric = "rmse") +
+  labs(title = "Boosted Tree") +
+  theme_minimal()
+# A learn rate of 0.630957 leads to the lowest RMSE. 
+# A mtry ("# Randomly Selected Predictors") of 19 leads to the lowest RMSE. 
+# A min_n ("Minimal Node Size") of 17 leads to the lowest RMSE. 
+
+
+autoplot_knn_2 <- autoplot(tuned_knn_2, metric = "rmse") +
+  labs(title = "K Nearest Neighbors") +
+  theme_minimal()
+# A neighbors of 15 leads to the lowest RMSE. 
+
+
+autoplot_rf_2 <- autoplot(tuned_rf_2, metric = "rmse") +
+  labs(title = "Random Forest") +
+  theme_minimal()
+# A mtry of 9 leads to the lowest RMSE. 
+# A min_n of 2 leads to the lowest RMSE.
+
+autoplot_lasso
+autoplot_lasso_2
+autoplot_ridge
+autoplot_ridge_2
+autoplot_bt
+autoplot_bt_2
+autoplot_knn
+autoplot_knn_2
+autoplot_rf
+autoplot_rf_2
+
+```
 
 
 

@@ -68,7 +68,6 @@ autoplot_rf <- autoplot(tuned_rf, metric = "rmse") +
 # A mtry of 7 leads to the lowest RMSE. 
 # A min_n of 2 leads to the lowest RMSE. 
 
-save(autoplot_lasso, autoplot_ridge, autoplot_bt, autoplot_knn, autoplot_rf, file = "results/autoplots.rda")
 
 
 

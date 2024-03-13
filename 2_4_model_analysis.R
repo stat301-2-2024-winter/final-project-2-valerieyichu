@@ -35,19 +35,19 @@ tidymodels_prefer()
 
 ## Visualize Results ----
 
-autoplot(tuned_lasso_2, metric = "rmse") +
+autoplot_lasso_2 <- autoplot(tuned_lasso_2, metric = "rmse") +
   labs(title = "Lasso") +
   theme_minimal()
 # A penalty of 1e^-08 leads to the lowest RMSE.  
 
 
-autoplot(tuned_ridge_2, metric = "rmse") +
+autoplot_ridge_2 <- autoplot(tuned_ridge_2, metric = "rmse") +
   labs(title = "Ridge") +
   theme_minimal()
 # A penalty of 1e^-08 leads to the lowest RMSE. 
 
 
-autoplot(tuned_bt_2, metric = "rmse") +
+autoplot_bt_2 <- autoplot(tuned_bt_2, metric = "rmse") +
   labs(title = "Boosted Tree") +
   theme_minimal()
 # A learn rate of 0.630957 leads to the lowest RMSE. 
@@ -55,13 +55,13 @@ autoplot(tuned_bt_2, metric = "rmse") +
 # A min_n ("Minimal Node Size") of 17 leads to the lowest RMSE. 
 
 
-autoplot(tuned_knn_2, metric = "rmse") +
+autoplot_knn_2 <- autoplot(tuned_knn_2, metric = "rmse") +
   labs(title = "K Nearest Neighbors") +
   theme_minimal()
 # A neighbors of 15 leads to the lowest RMSE. 
 
 
-autoplot(tuned_rf_2, metric = "rmse") +
+autoplot_rf_2 <- autoplot(tuned_rf_2, metric = "rmse") +
   labs(title = "Random Forest") +
   theme_minimal()
 # A mtry of 9 leads to the lowest RMSE. 
