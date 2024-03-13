@@ -24,6 +24,12 @@ skimr::skim(avocado)
 # Exploring `average_price`
 avocado |> 
   ggplot(aes(x = average_price)) +
+  geom_density() +
+  scale_x_continuous(breaks = seq(0, 4, 0.5)) +
+  theme_minimal()
+
+avocado |> 
+  ggplot(aes(x = average_price)) +
   geom_boxplot() +
   scale_x_continuous(breaks = seq(0, 4, 0.5)) +
   theme_minimal()

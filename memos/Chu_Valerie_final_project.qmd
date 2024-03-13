@@ -139,6 +139,19 @@ skimr::skim(avocado)
 
 avocado |> 
   ggplot(aes(x = average_price)) +
+  geom_density() +
+  scale_x_continuous(breaks = seq(0, 4, 0.5)) +
+  theme_minimal()
+
+```
+
+A density plot above shows that average price is slightly right skewed, but not to the extreme that it warrants any logarithmic transformations. The average price is between $1 and $1.5. Now, let's get a bit more specific with a boxplot:
+
+```{r}
+#| echo: false
+
+avocado |> 
+  ggplot(aes(x = average_price)) +
   geom_boxplot() +
   scale_x_continuous(breaks = seq(0, 4, 0.5)) +
   theme_minimal()
@@ -174,7 +187,7 @@ avocado |>
 ```
 
 
-<br/> To point out some things I'll note when explaining my feature engineered recipe, but that are worth highlighting from this correlation plot:
+<br/> Pointing out some things I'll note when explaining my feature engineered recipe, but that are worth highlighting from this correlation plot:
 
 - There is a strong correlation between the size of the avocado (x4046, x4225, x4770 denote the type of avocado, where each weight category is given a specific number) and the size of the bag (small bags, large bags, extra large bags). This is unsurprising, yet also interesting to consider because by definition, the weight categories overlap a bit ^[https://loveonetoday.com/how-to/identify-hass-avocados/], so that's why the correlations aren't perfect. 
 
