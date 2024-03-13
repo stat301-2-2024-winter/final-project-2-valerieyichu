@@ -394,32 +394,7 @@ autoplot_rf_2
 
 ## Final Model Analysis
 
-The table of RMSEs and standard errors created below was made using kitchen recipes. It displays the RMSE and standard error for the model with the lowest RMSE for each model type.
 
-The baseline is the null model. I've also defined and fitted the OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest models. 
-
-```{r, echo = FALSE}
-tbl_result |> 
-  knitr::kable()
-
-```
-
-The best model is the random forest model because it has the lowest RMSE. It also has a low standard error. So the predictions created by the random forest model should be the closest to the true values.
-
-### EDA
-
-Next, I will do a preliminary EDA to continue on the progress made in Progress Memo 1. This will help decide what interactions to use in my second recipe. 
-
-Below is a correlation plot.
-
-```{r, echo = FALSE}
-avocado |> 
-  select(average_price, total_volume, x4046, x4225, x4770, total_bags, 
-         small_bags, large_bags, x_large_bags) |> 
-  cor() |> 
-  knitr::kable()
-```
-It seems like for my second recipe, I could create interactions between `total_bags` and `small_bags`, `total_volume` and `x4046`, and `total_volume` and `x4225`. (As a reminder, 4046 and 4225 are PLU numbers — numbers used to properly identify avocados sold at retail.)
 
 
 ## Conclusion
