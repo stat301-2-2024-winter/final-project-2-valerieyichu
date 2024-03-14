@@ -3055,10 +3055,7 @@ vertical-align: -.125em;
   <li><a href="#finalwinning-model" id="toc-finalwinning-model" class="nav-link" data-scroll-target="#finalwinning-model">Final/Winning Model</a></li>
   <li><a href="#tuning-parameters" id="toc-tuning-parameters" class="nav-link" data-scroll-target="#tuning-parameters">Tuning Parameters</a></li>
   </ul></li>
-  <li><a href="#final-model-analysis" id="toc-final-model-analysis" class="nav-link" data-scroll-target="#final-model-analysis">Final Model Analysis</a>
-  <ul class="collapse">
-  <li><a href="#eda" id="toc-eda" class="nav-link" data-scroll-target="#eda">EDA</a></li>
-  </ul></li>
+  <li><a href="#final-model-analysis" id="toc-final-model-analysis" class="nav-link" data-scroll-target="#final-model-analysis">Final Model Analysis</a></li>
   <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul>
@@ -3886,219 +3883,225 @@ Table 1: The RMSE and Standard Errors of All Models
 </div>
 </div>
 </div>
+<p>Based on the autoplots above and the select_best function, these are the tuning parameter combinations with the best performance values for each model type:</p>
+<p>The best hyperparameter for the kitchen sink lasso model is a penalty of 0.0000000001</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameter for the kitchen sink ridge model is a penalty of 0.0000000001</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameters for the kitchen sink boosted model are mtry = 14, min_n = 14, learn_rate = 0.631</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">mtry</th>
+<th style="text-align: right;">min_n</th>
+<th style="text-align: right;">learn_rate</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">0.6309573</td>
+<td style="text-align: left;">Preprocessor1_Model125</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameter for the kitchen sink k nearest neighbors model is neighbors = 8</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">neighbors</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">Preprocessor1_Model3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameters for the kitchen sink random forest model are mtry = 7, min_n = 2</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">mtry</th>
+<th style="text-align: right;">min_n</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Preprocessor1_Model03</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameter for the feature engineered lasso model is a penalty of 0.0000000001</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameter for the feature engineered ridge model is a penalty of 0.0000000001</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">Preprocessor1_Model1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameters for the feature engineered boosted tree model are mtry = 17, min_n = 9, learn_rate = 0.631</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">mtry</th>
+<th style="text-align: right;">min_n</th>
+<th style="text-align: right;">learn_rate</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.6309573</td>
+<td style="text-align: left;">Preprocessor1_Model115</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameters for the feature engineered k nearest neighbors model are neighbors = 15</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">neighbors</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: left;">Preprocessor1_Model5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>The best hyperparameters for the feature engineered random forest model are mtry = 9, min_n = 2</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped small">
+<thead>
+<tr class="header">
+<th style="text-align: right;">mtry</th>
+<th style="text-align: right;">min_n</th>
+<th style="text-align: left;">.config</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Preprocessor1_Model03</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><br></p>
+<p>We know that the kitchen sink random forest model is the best model because it has the lowest RMSE and a low standard error. As stated above, its best hyperparameters are mtry = 7 and min_n = 2.</p>
+<p>If we wanted to explore further tuning, we could look again at the autoplot. We see that as the minimal node size decreases, RMSE decreases. So the best min_n should stay at 2. We also see that as the number of randomly selected predictors approaches 7, that is when RMSE is lowest — regardless of the minimal node size. So it seems like there isn’t much of a point in tuning again, especially since we already know from the autoplot that these two hyperparameters will optimize the model such that it produces the lowest RMSE.</p>
 </section>
 </section>
 <section id="final-model-analysis" class="level2">
 <h2 class="anchored" data-anchor-id="final-model-analysis">Final Model Analysis</h2>
-<p>The table of RMSEs and standard errors created below was made using kitchen recipes. It displays the RMSE and standard error for the model with the lowest RMSE for each model type.</p>
-<p>The baseline is the null model. I’ve also defined and fitted the OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest models.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<thead>
-<tr class="header">
-<th style="text-align: left;">Model Type</th>
-<th style="text-align: right;">RMSE</th>
-<th style="text-align: right;">Std Error</th>
-<th style="text-align: right;">Num Computations</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">rf</td>
-<td style="text-align: right;">0.1741050</td>
-<td style="text-align: right;">0.0008874</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">knn</td>
-<td style="text-align: right;">0.1997596</td>
-<td style="text-align: right;">0.0011066</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">bt</td>
-<td style="text-align: right;">0.2123226</td>
-<td style="text-align: right;">0.0008106</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">lasso</td>
-<td style="text-align: right;">0.3003404</td>
-<td style="text-align: right;">0.0009083</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">lm</td>
-<td style="text-align: right;">0.3003657</td>
-<td style="text-align: right;">0.0009079</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">ridge</td>
-<td style="text-align: right;">0.3014926</td>
-<td style="text-align: right;">0.0008964</td>
-<td style="text-align: right;">50</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">null</td>
-<td style="text-align: right;">0.3988374</td>
-<td style="text-align: right;">0.0007374</td>
-<td style="text-align: right;">50</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>The best model is the random forest model because it has the lowest RMSE. It also has a low standard error. So the predictions created by the random forest model should be the closest to the true values.</p>
-<section id="eda" class="level3">
-<h3 class="anchored" data-anchor-id="eda">EDA</h3>
-<p>Next, I will do a preliminary EDA to continue on the progress made in Progress Memo 1. This will help decide what interactions to use in my second recipe.</p>
-<p>Below is a correlation plot.</p>
-<div class="cell">
-<div class="cell-output-display">
-<table class="table table-sm table-striped small">
-<colgroup>
-<col style="width: 11%">
-<col style="width: 11%">
-<col style="width: 10%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 9%">
-<col style="width: 10%">
-</colgroup>
-<thead>
-<tr class="header">
-<th style="text-align: left;"></th>
-<th style="text-align: right;">average_price</th>
-<th style="text-align: right;">total_volume</th>
-<th style="text-align: right;">x4046</th>
-<th style="text-align: right;">x4225</th>
-<th style="text-align: right;">x4770</th>
-<th style="text-align: right;">total_bags</th>
-<th style="text-align: right;">small_bags</th>
-<th style="text-align: right;">large_bags</th>
-<th style="text-align: right;">x_large_bags</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td style="text-align: left;">average_price</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">-0.1927524</td>
-<td style="text-align: right;">-0.2083170</td>
-<td style="text-align: right;">-0.1729278</td>
-<td style="text-align: right;">-0.1794460</td>
-<td style="text-align: right;">-0.1770879</td>
-<td style="text-align: right;">-0.1747298</td>
-<td style="text-align: right;">-0.1729400</td>
-<td style="text-align: right;">-0.1175916</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">total_volume</td>
-<td style="text-align: right;">-0.1927524</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9778632</td>
-<td style="text-align: right;">0.9741808</td>
-<td style="text-align: right;">0.8722023</td>
-<td style="text-align: right;">0.9630471</td>
-<td style="text-align: right;">0.9672382</td>
-<td style="text-align: right;">0.8806396</td>
-<td style="text-align: right;">0.7471574</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x4046</td>
-<td style="text-align: right;">-0.2083170</td>
-<td style="text-align: right;">0.9778632</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9261100</td>
-<td style="text-align: right;">0.8333891</td>
-<td style="text-align: right;">0.9200566</td>
-<td style="text-align: right;">0.9252799</td>
-<td style="text-align: right;">0.8386450</td>
-<td style="text-align: right;">0.6993773</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">x4225</td>
-<td style="text-align: right;">-0.1729278</td>
-<td style="text-align: right;">0.9741808</td>
-<td style="text-align: right;">0.9261100</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.8878550</td>
-<td style="text-align: right;">0.9057875</td>
-<td style="text-align: right;">0.9160312</td>
-<td style="text-align: right;">0.8100152</td>
-<td style="text-align: right;">0.6888087</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x4770</td>
-<td style="text-align: right;">-0.1794460</td>
-<td style="text-align: right;">0.8722023</td>
-<td style="text-align: right;">0.8333891</td>
-<td style="text-align: right;">0.8878550</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.7923143</td>
-<td style="text-align: right;">0.8027330</td>
-<td style="text-align: right;">0.6984710</td>
-<td style="text-align: right;">0.6798611</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">total_bags</td>
-<td style="text-align: right;">-0.1770879</td>
-<td style="text-align: right;">0.9630471</td>
-<td style="text-align: right;">0.9200566</td>
-<td style="text-align: right;">0.9057875</td>
-<td style="text-align: right;">0.7923143</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9943346</td>
-<td style="text-align: right;">0.9430091</td>
-<td style="text-align: right;">0.8042326</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">small_bags</td>
-<td style="text-align: right;">-0.1747298</td>
-<td style="text-align: right;">0.9672382</td>
-<td style="text-align: right;">0.9252799</td>
-<td style="text-align: right;">0.9160312</td>
-<td style="text-align: right;">0.8027330</td>
-<td style="text-align: right;">0.9943346</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.9025889</td>
-<td style="text-align: right;">0.8068446</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">large_bags</td>
-<td style="text-align: right;">-0.1729400</td>
-<td style="text-align: right;">0.8806396</td>
-<td style="text-align: right;">0.8386450</td>
-<td style="text-align: right;">0.8100152</td>
-<td style="text-align: right;">0.6984710</td>
-<td style="text-align: right;">0.9430091</td>
-<td style="text-align: right;">0.9025889</td>
-<td style="text-align: right;">1.0000000</td>
-<td style="text-align: right;">0.7108584</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">x_large_bags</td>
-<td style="text-align: right;">-0.1175916</td>
-<td style="text-align: right;">0.7471574</td>
-<td style="text-align: right;">0.6993773</td>
-<td style="text-align: right;">0.6888087</td>
-<td style="text-align: right;">0.6798611</td>
-<td style="text-align: right;">0.8042326</td>
-<td style="text-align: right;">0.8068446</td>
-<td style="text-align: right;">0.7108584</td>
-<td style="text-align: right;">1.0000000</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>It seems like for my second recipe, I could create interactions between <code>total_bags</code> and <code>small_bags</code>, <code>total_volume</code> and <code>x4046</code>, and <code>total_volume</code> and <code>x4225</code>. (As a reminder, 4046 and 4225 are PLU numbers — numbers used to properly identify avocados sold at retail.)</p>
-</section>
 </section>
 <section id="conclusion" class="level2">
 <h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>

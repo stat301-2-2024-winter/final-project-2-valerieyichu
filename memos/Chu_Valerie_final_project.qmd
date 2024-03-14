@@ -390,6 +390,116 @@ autoplot_rf_2
 
 ```
 
+Based on the autoplots above and the select_best function, these are the tuning parameter combinations with the best performance values for each model type: 
+
+
+The best hyperparameter for the kitchen sink lasso model is a penalty of 0.0000000001
+
+```{r, echo = FALSE}
+tuned_lasso |> select_best(metric = "rmse") |> 
+  knitr::kable()
+# Best hyperparameter: Penalty = 0.0000000001
+
+```
+<br/>
+
+
+The best hyperparameter for the kitchen sink ridge model is a penalty of 0.0000000001
+
+```{r, echo = FALSE}
+tuned_ridge |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: Penalty = 0.0000000001
+```
+<br/>
+
+
+The best hyperparameters for the kitchen sink boosted model are mtry = 14, min_n = 14, learn_rate = 0.631
+
+```{r, echo = FALSE}
+tuned_bt |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameters: mtry = 14. min_n = 14. learn_rate = 0.631
+```
+<br/>
+
+
+The best hyperparameter for the kitchen sink k nearest neighbors model is neighbors = 8
+
+```{r, echo = FALSE}
+tuned_knn |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: neighbors = 8
+```
+<br/>
+
+
+The best hyperparameters for the kitchen sink random forest model are mtry = 7, min_n = 2
+
+```{r, echo = FALSE}
+tuned_rf |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: mtry = 7. min_n = 2
+```
+<br/>
+
+
+The best hyperparameter for the feature engineered lasso model is a penalty of 0.0000000001
+
+```{r, echo = FALSE}
+tuned_lasso_2 |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: Penalty = 0.0000000001
+```
+<br/>
+
+
+The best hyperparameter for the feature engineered ridge model is a penalty of 0.0000000001
+
+```{r, echo = FALSE}
+tuned_ridge_2 |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: Penalty = 0.0000000001
+```
+<br/>
+
+
+The best hyperparameters for the feature engineered boosted tree model are mtry = 17, min_n = 9, learn_rate = 0.631
+
+```{r, echo = FALSE}
+tuned_bt_2 |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameters: mtry = 17. min_n = 9. learn_rate = 0.631
+```
+<br/>
+
+
+The best hyperparameters for the feature engineered k nearest neighbors model are neighbors = 15
+
+```{r, echo = FALSE}
+tuned_knn_2 |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: neighbors = 15
+```
+<br/>
+
+
+The best hyperparameters for the feature engineered random forest model are mtry = 9, min_n = 2
+
+```{r, echo = FALSE}
+tuned_rf_2 |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: mtry = 9. min_n = 2
+```
+<br/>
+
+
+We know that the kitchen sink random forest model is the best model because it has the lowest RMSE and a low standard error. As stated above, its best hyperparameters are mtry = 7 and min_n = 2.
+
+If we wanted to explore further tuning, we could look again at the autoplot. We see that as the minimal node size decreases, RMSE decreases. So the best min_n should stay at 2. We also see that as the number of randomly selected predictors approaches 7, that is when RMSE is lowest — regardless of the minimal node size. So it seems like there isn't much of a point in tuning again, especially since we already know from the autoplot that these two hyperparameters will optimize the model such that it produces the lowest RMSE. 
+
+
+
 
 
 ## Final Model Analysis
