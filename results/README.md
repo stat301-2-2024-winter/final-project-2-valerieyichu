@@ -31,3 +31,6 @@ This is the results folder. It contains the data for the models and recipes.
 - `tuned_knn.rda` - tuned k nearest neighbors model
 
 - `tuned_rf.rda` - tuned random forest model
+
+Files that end with "_2" are the equivalents of the rest of their file names, but they were created using the feature engineered recipe instead of the kitchen sink recipe. 
+
