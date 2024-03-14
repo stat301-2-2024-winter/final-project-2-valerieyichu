@@ -29,7 +29,7 @@ tidymodels_prefer()
 
 ## Training RF ----
 
-# train the winning/best model identified in the last task (boosted tree) on the entire training data set
+# train the winning/best model identified in the last task on the entire training data set
 # finalize workflow ----
 final_wflow <- tuned_rf |> 
   extract_workflow(tuned_rf) |>  

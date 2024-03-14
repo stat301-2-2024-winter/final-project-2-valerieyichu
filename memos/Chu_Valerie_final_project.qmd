@@ -63,6 +63,9 @@ load(here("results/tuned_knn_2.rda"))
 load(here("results/tuned_rf_2.rda"))
 load(here("results/tbl_result_2.rda"))
 
+load(here("results/metrics_final_fit.rda"))
+load(here("results/final_pred_plot.rda"))
+
 ```
 
 
@@ -509,6 +512,16 @@ Overall, I'm surprised that the random forest model built with the kitchen sink 
 
 
 ## Final Model Analysis
+@tbl-metrics-final-fit shows the fit of the final model to the testing dataset: 
+
+```{r, echo = FALSE}
+#| label: tbl-metrics-final-fit
+#| tbl-cap: "The Metrics"
+
+metrics_final_fit |> 
+  knitr::kable(digits = c(NA, NA, 4))
+
+```
 
 
 
