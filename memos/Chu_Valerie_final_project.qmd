@@ -512,21 +512,50 @@ Overall, I'm surprised that the random forest model built with the kitchen sink 
 
 
 ## Final Model Analysis
-@tbl-metrics-final-fit shows the fit of the final model to the testing dataset: 
+
+@tbl-metrics-final-fit shows the fit of the final model (the kitchen sink random forest model) to the testing dataset: 
 
 ```{r, echo = FALSE}
 #| label: tbl-metrics-final-fit
-#| tbl-cap: "The Metrics"
+#| tbl-cap: "The Metrics of the Final Model to the Testing Data"
 
 metrics_final_fit |> 
   knitr::kable(digits = c(NA, NA, 4))
 
 ```
 
+At 0.1765, the RMSE is low, which is great. The price range for avocados in this dataset are from between $0.44 and $3.25. In the context of the average price of a single avocado, this RMSE would measure the difference between the model’s predicted average price and the actual average price (this difference would be about $0.18). Given that many of the homes in this dataset sold for more than two dollars, a RMSE of only 0.1765 is quite good.
 
+A RSQ of 0.8192 is pretty close to 1, which is quite good. That means around 81.92% of the variation in the average price variable for the testing dataset can be explained by the model. This is not too surprising because our kitchen sink random forest model was the best model, and since we also resampled, we expect our model to perform well.
+
+The MAE is 0.1229, which is decently close to 0, which is good. On average, the absolute difference between the model’s predicted average price and actual average price in the testing dataset is around $0.13. The average price of a single avocado ranges from around $0.44 to around $3.25, so having only about 0.1229 of mean absolute error is low and means our kitchen sink random forest model predictions are good.
+
+
+@fig-final-pred-plot shows the exploration of predictions vs true values: 
+
+```{r, echo = FALSE}
+#| label: fig-final-pred-plot
+#| fig-cap: "The Metrics of the Final Model to the Testing Data"
+
+final_pred_plot
+
+```
+
+Overall, the new model fits nicely. Its predictions are a bit high near the upper outliers, but otherwise, it fits the majority of the data well. 
+
+A few notes additional notes about this graph:
+
+- I did not transform the target variable, so there is not need to scale the outcome variable. 
+
+- The effort of building a predictive model does pay off. It is better than the null model — it had a lower RMSE and more accurate predictions. In fact, looking at @tbl-models from the previous section shows that all the models I built were better predictive models than the null model. 
+
+- I do think the reason the predictions are a bit higher than they actually are for the upper outliers is because the random forest model is not a parametric model. But it is still great at capturing the majority of the data, probably because its large number of decision trees are independent of each other and thus not overly influenced by how different the avocados were to each other. 
 
 
 ## Conclusion
+
+In conclusion, the kitchen sink random forest model was the best predictive model out of all model types (Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest) and across both the kitchen sink and feature engineered recipes. 
+ 
  
 
 ## References
