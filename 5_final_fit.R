@@ -67,7 +67,7 @@ final_pred_plot <- pred_final_fit |>
   ggplot(aes(x = average_price, y = .pred)) +
   geom_point(alpha = 0.5) +
   geom_abline(lty = 2) +
-  labs(title = "Predicted Average Price of a Single Avocado vs. True Average Price",
+  labs(title = "Predicted Average Price of a Single Avocado \n vs. True Average Price of a Single Avocado",
        x = "Average Price of a Single Avocado",
        y = "Predicted Average Price of a Single Avocado") +
   theme_minimal() +
