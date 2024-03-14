@@ -1,0 +1,104 @@
+---
+title: "Executive Summary: An Analysis of Avocados"
+subtitle: |
+  | Final Project 
+  | Data Science 2 with R (STAT 301-2)
+author: "Valerie Chu"
+date: today
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    
+execute:
+  warning: false
+
+from: markdown+emoji 
+reference-location: margin
+citation-location: margin
+---
+
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+[https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git](https://github.com/stat301-2-2024-winter/final-project-2-valerieyichu.git)
+
+:::
+
+
+```{r}
+#| echo: false
+
+# load packages
+library(tidyverse)
+library(tidymodels)
+library(here)
+
+# handle common conflicts
+tidymodels_prefer()
+
+# load packages
+load(here("results/avocado_split.rda"))
+load(here("results/avocado_recipe_param.rda"))
+load(here("results/avocado_recipe_tree.rda"))
+load(here("results/fit_null.rda"))
+load(here("results/fit_lm.rda"))
+load(here("results/tuned_lasso.rda"))
+load(here("results/tuned_ridge.rda"))
+load(here("results/tuned_bt.rda"))
+load(here("results/tuned_knn.rda"))
+load(here("results/tuned_rf.rda"))
+load(here("results/tbl_result.rda"))
+
+load(here("results/avocado_recipe_param_2.rda"))
+load(here("results/avocado_recipe_tree_2.rda"))
+load(here("results/fit_null_2.rda"))
+load(here("results/fit_lm_2.rda"))
+load(here("results/tuned_lasso_2.rda"))
+load(here("results/tuned_ridge_2.rda"))
+load(here("results/tuned_bt_2.rda"))
+load(here("results/tuned_knn_2.rda"))
+load(here("results/tuned_rf_2.rda"))
+load(here("results/tbl_result_2.rda"))
+
+load(here("results/metrics_final_fit.rda"))
+load(here("results/final_pred_plot.rda"))
+
+```
+
+
+```{r, echo = FALSE}
+# Read in the avocado dataset
+avocado <- read_csv(here("data/avocado.csv")) |> 
+  janitor::clean_names()
+
+```
+
+## Purpose
+
+I love avocados. Using this [Avocado Prices dataset on Kaggle](https://www.kaggle.com/datasets/neuromusic/avocado-prices) ^[Kiggins, Justin. "Avocado Prices." Kaggle, 2018, https://www.kaggle.com/datasets/neuromusic/avocado-prices.], I want to predict the average price of a single avocado (`average_price`) so that I can pinpoint and eventually move to a city with the cheapest avocados...
+
+
+## Major Takeaways
+@fig-final-pred-plot shows the exploration of predictions vs true values: 
+
+```{r, echo = FALSE}
+#| label: fig-final-pred-plot
+#| fig-cap: "The Metrics of the Final Model to the Testing Data"
+
+final_pred_plot
+
+```
+
+
+
+## Conclusion
+
+In conclusion, the kitchen sink random forest model was the best predictive model out of all model types (Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest) and across both the kitchen sink and feature engineered recipes. 
+
+In the future, I want to boost the predictive accuracy of this model and work with updated data to predict the average price of a single avocado based on the variables in this dataset. I've accomplished my goal of predicting the average price of a single Haas avocado sold between 2015 and 2018, and now I just need an even more accurate model and an even more updated dataset to pin down the city I want to move to in 2026, a city with the cheapest avocados…
+ 
+
+
