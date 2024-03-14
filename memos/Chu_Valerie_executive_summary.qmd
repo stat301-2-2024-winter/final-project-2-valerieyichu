@@ -82,7 +82,89 @@ I love avocados. Using this [Avocado Prices dataset on Kaggle](https://www.kaggl
 
 
 ## Major Takeaways
-@fig-final-pred-plot shows the exploration of predictions vs true values: 
+
+### About The Target Variable
+
+There was no missingness to this dataset with 18,249 observations, so after a 70/30 split and resampling (10 folds, 5 repeats), this dataset was good to go. This is a regression problem with RMSE as the assessment metric. 
+
+@fig-boxplot shows that average price is a bit right skewed but not enough to warrant a transformation. It has a few outliers spanning the $2.50 to $3.25 per avocado range. The cheapest average price of an avocado is $0.44, and the most expensive average price of an avocado is $3.25.
+
+```{r}
+#| echo: false
+#| label: fig-boxplot
+#| fig-cap: "What is the distribution of the average price of a single avocado?"
+
+avocado |> 
+  ggplot(aes(x = average_price)) +
+  geom_boxplot() +
+  scale_x_continuous(breaks = seq(0, 4, 0.5)) +
+  theme_minimal()
+
+```
+
+
+### Recipes and Results
+
+I used the following model types: Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest. 
+
+I used two recipes for each model type, a kitchen sink recipe (a simple, general recipe) and a feature engineered recipe (a recipe informed by my exploratory data analysis of the target variable, average price, and other variables in the dataset). 
+
+@tbl-models shows the model results, where Model Types ending in "_2" used the feature engineered recipe: 
+
+```{r, echo = FALSE}
+#| label: tbl-models
+#| tbl-cap: "The RMSE and Standard Errors of All Models"
+
+tbl_result_large <- bind_rows(tbl_result, tbl_result_2)
+
+tbl_result_large |> 
+  knitr::kable()
+
+```
+
+@tbl-models shows that the random forest model built with the kitchen sink had the lowest RMSE and lowest standard error of all the models, so it is the best model. Its predictions will be closest to the true values. 
+
+@fig-autoplot and @tbl-hyperparameters below show that the best hyperparameters for the kitchen sink random forest model are mtry = 7, min_n = 2
+
+```{r, echo = FALSE}
+#| label: fig-autoplot
+#| fig-cap: "An Autoplot of the Kitchen Sink Random Forest Model"
+autoplot(tuned_rf, metric = "rmse") +
+  labs(title = "Random Forest") +
+  theme_minimal()
+# A mtry of 7 leads to the lowest RMSE. 
+# A min_n of 2 leads to the lowest RMSE.
+
+```
+
+```{r, echo = FALSE}
+#| label: tbl-hyperparameters
+#| tbl-cap: "The Best Hyperparameters for the Kitchen Sink Random Forest Model"
+
+tuned_rf |> select_best(metric = "rmse")|> 
+  knitr::kable()
+# Best hyperparameter: mtry = 7. min_n = 2
+```
+
+If we wanted to explore further tuning, we could look again at the autoplot. We see that as the minimal node size decreases, RMSE decreases. So the best min_n should stay at 2. We also see that as the number of randomly selected predictors approaches 7, that is when RMSE is lowest — regardless of the minimal node size. So it seems like there isn’t much of a point in tuning again, especially since we already know from the autoplot that these two hyperparameters will optimize the model such that it produces the lowest RMSE.
+
+
+### The Final Fit
+
+@tbl-metrics-final-fit shows the fit of the final model (the kitchen sink random forest model) to the testing dataset: 
+
+```{r, echo = FALSE}
+#| label: tbl-metrics-final-fit
+#| tbl-cap: "The Metrics of the Final Model to the Testing Data"
+
+metrics_final_fit |> 
+  knitr::kable(digits = c(NA, NA, 4))
+
+```
+
+The RMSE is low, the RSQ is close to 1, and the MAE is close to 0. That means the final model did quite well in predicting average price using the testing dataset. 
+
+@fig-final-pred-plot also shows predictions vs. true values: 
 
 ```{r, echo = FALSE}
 #| label: fig-final-pred-plot
@@ -92,11 +174,12 @@ final_pred_plot
 
 ```
 
+Overall, the new model fits nicely. Its predictions are a bit high near the upper outliers, but otherwise, it fits the majority of the data well.
 
 
 ## Conclusion
 
-In conclusion, the kitchen sink random forest model was the best predictive model out of all model types (Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest) and across both the kitchen sink and feature engineered recipes. 
+The kitchen sink random forest model was the best predictive model out of all model types (Null (baseline model), OLS, Lasso, Ridge, Boosted Tree, K Nearest Neighbors, and Random Forest) and across both the kitchen sink and feature engineered recipes. 
 
 In the future, I want to boost the predictive accuracy of this model and work with updated data to predict the average price of a single avocado based on the variables in this dataset. I've accomplished my goal of predicting the average price of a single Haas avocado sold between 2015 and 2018, and now I just need an even more accurate model and an even more updated dataset to pin down the city I want to move to in 2026, a city with the cheapest avocados…
  
